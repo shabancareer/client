@@ -8,8 +8,7 @@ import { Link } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const clientId =
-    "973714267326-ur64lcfoj5g7st6lo39kgo1r952pl79i.apps.googleusercontent.com";
+  const clientId = "";
   const redirectUri = "http://localhost:5173";
   // Parse JWT Helper
   const parseJwt = (token) => {
