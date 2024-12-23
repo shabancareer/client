@@ -43,7 +43,7 @@ const Login = () => {
           body: new URLSearchParams({
             code,
             client_id: clientId,
-            client_secret: "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", // Replace with your client secret
+            client_secret: "", // Replace with your client secret
             redirect_uri: redirectUri,
             grant_type: "authorization_code",
           }),
@@ -123,7 +123,7 @@ const Login = () => {
   return (
     <>
       <div className="flex flex-col space-y-4 w-5/12">
-        {/* <GoogleOAuthProvider clientId="973714267326-ur64lcfoj5g7st6lo39kgo1r952pl79i.apps.googleusercontent.com"> */}
+        {/* <GoogleOAuthProvider clientId=""> */}
         <div className="flex justify-center my-10">
           <h3 className="text-gray-700">Sign in with:</h3>
           <button
