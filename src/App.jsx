@@ -10,6 +10,8 @@ import { Toaster } from "react-hot-toast";
 import "./App.css";
 // import LoginPage2 from "./pages/LoginPage";
 import LoginPage from "./pages/auth";
+import { ChatDashboard } from "./chatPages/chatDashbord.jsx";
+// import ChatDashboard from "./chatPages/chatDashbord.jsx";
 
 function App() {
   const mode = useSelector((state) => state.mode);
@@ -30,6 +32,7 @@ function App() {
           <Routes>
             {/* Other routes */}
             <Route path="/" element={<LoginPage />} />
+            <Route path="/chatDashbord" element={<ChatDashboard />} />
             <Route path="/auth/callback" element={<AuthCheck />} />
           </Routes>
         </ThemeProvider>
