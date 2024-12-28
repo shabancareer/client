@@ -79,8 +79,9 @@ const Login = () => {
   //   window.location.href = googleAuthUrl;
   const handleLoginSuccess = async (tokenResponse) => {
     try {
-      console.log("Token Response:=", tokenResponse);
+      // console.log("Token Response:=", tokenResponse);
       const { access_token } = tokenResponse;
+      // console.log(access_token);
       // Fetch user info from Google
       const userInfoResponse = await fetch(
         "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -90,23 +91,12 @@ const Login = () => {
           },
         }
       );
-
+      // console.log(userInfoResponse);
       if (!userInfoResponse.ok) {
         throw new Error("Failed to fetch user info");
       }
       const userInfo = await userInfoResponse.json();
-      console.log("User Info:", userInfo);
-      const { email, email_verified, name, picture, hd } = userInfo;
-      // Verify email domain (optional)
-      if (hd !== "loadstop.com") {
-        // alert("Only emails from loadstop.com are allowed to log in.");
-        toast({
-          title: "Login Failed",
-          description: "Only emails from loadstop.com are allowed to log in.",
-          variant: "destructive",
-        });
-        return;
-      }
+      const { email, email_verified, name, picture, sub } = userInfo;
 
       // Check if email is verified
       if (!email_verified) {
@@ -120,28 +110,42 @@ const Login = () => {
         return;
       }
       // Send user info to backend for validation
-      const backendResponse = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, name, picture }),
-      });
+      const backendResponse = await fetch(
+        "http://localhost:3000/api/googleLogin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, name, picture, sub }),
+        }
+      );
       const backendResult = await backendResponse.json();
-
-      if (backendResult.success) {
-        alert(`Welcome back, ${backendResult.user.name}!`);
-        // Redirect or store session/token as needed
-      } else {
-        alert(backendResult.message);
+      if (!backendResult.success) {
+        toast({
+          title: "Login Failed!..",
+          description: backendResult.error,
+          variant: "destructive",
+        });
+        return;
       }
+      toast({
+        title: "Welcome!",
+        description: `Hello, ${backendResult.data.name}. Login successful!`,
+        variant: "success",
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Login Error",
+        description: "An error occurred while logging in. Please try again.",
+        variant: "destructive",
+      });
     }
   };
   const loginWithGoogle = useGoogleLogin({
     onSuccess: handleLoginSuccess,
-    onError: () => console.log("Google Login Failed"),
+    // onError: () => console.log("Google Login Failed"),
   });
   return (
     <>
@@ -177,9 +181,7 @@ const Login = () => {
           className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="flex flex-row justify-end mt-7">
-          <Link to="/" className="text-blue-600">
-            Forget Password?
-          </Link>
+          <button className="text-blue-600">Forget Password?</button>
         </div>
         <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
           <button type="submit">Sing In</button>
@@ -188,10 +190,7 @@ const Login = () => {
       <div>
         <div className="flex flex-row pt-4">
           <h4 className="px-3">Not a Member?</h4>
-          <Link className="text-blue-800" to="/">
-            {" "}
-            Sing Up
-          </Link>
+          <button className="text-blue-800"> Sing Up</button>
         </div>
       </div>
     </>

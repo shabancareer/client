@@ -1,5 +1,5 @@
 // import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
@@ -7,25 +7,19 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import googleImg from "../../public/assets/images/google.svg";
 import { toast } from "../components/ui/use-toast";
-// import { GoogleLogin, googleLogout } from "@react-oauth/google";
-// import { decode } from "jwt-decode";
-// import { useNavigate } from "react-router-dom";
 
 const Singup = () => {
   const navigate = useNavigate();
   // Extract token from URL
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get("token");
-
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
       const { email } = decodedToken;
       console.log("User Email:", email);
-
       // Store token securely
       localStorage.setItem("accessToken", token);
-
       // You can optionally trigger a redirect here if needed:
       // window.location.href = "/";
     } catch (error) {
@@ -151,10 +145,7 @@ const Singup = () => {
       </form>
       <div>
         <div className="flex flex-row pt-4">
-          <Link className="text-blue-800" to="/">
-            {" "}
-            Already have a account?
-          </Link>
+          <button className="text-blue-800"> Already have a account?</button>
         </div>
       </div>
     </>

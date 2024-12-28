@@ -5,7 +5,6 @@ import Singup from "./singup";
 import Login from "./login";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "../components/ui/use-toast";
-
 const Userauth = () => {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("Table1");
