@@ -1,82 +1,22 @@
 // import React from "react";
 import { useDispatch } from "react-redux";
-import { useEffect } from "react";
+import ReactDOM from "react-dom/client";
+import { useState, useEffect } from "react";
 import { loginSuccess } from "../slices/userSlice";
-import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+// import { Link } from "react-router-dom";
+// import { jwtDecode } from "jwt-decode";
 // import { GoogleLogin } from "@react-oauth/google";
 // import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import { toast } from "../components/ui/use-toast";
-
+import ForgetPasswordPopup from "./ForgetPasswordPopup";
 const Login = () => {
+  const [showPopup, setShowPopup] = useState(false);
   const dispatch = useDispatch();
   const clientId =
     "973714267326-ur64lcfoj5g7st6lo39kgo1r952pl79i.apps.googleusercontent.com";
   const redirectUri = "http://localhost:5173/chatDashbord";
-  // Parse JWT Helper
-  // const parseJwt = (token) => {
-  //   try {
-  //     const base64Url = token.split(".")[1];
-  //     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  //     const jsonPayload = decodeURIComponent(
-  //       atob(base64)
-  //         .split("")
-  //         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-  //         .join("")
-  //     );
-  //     return JSON.parse(jsonPayload);
-  //   } catch (error) {
-  //     console.error("Error parsing JWT token:", error);
-  //     return null;
-  //   }
-  // };
-  // Function to handle the redirect flow
-  // const handleRedirect = async () => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const code = params.get("code");
-  //   if (code) {
-  //     console.log("Authorization Code:", code);
-  //     try {
-  //       // Exchange the authorization code for tokens
-  //       const response = await fetch("https://oauth2.googleapis.com/token", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/x-www-form-urlencoded",
-  //         },
-  //         body: new URLSearchParams({
-  //           code,
-  //           client_id: clientId,
-  //           client_secret: "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", // Replace with your client secret
-  //           redirect_uri: redirectUri,
-  //           grant_type: "authorization_code",
-  //         }),
-  //       });
 
-  //       const data = await response.json();
-  //       console.log("Token Exchange Response:", data);
-  //       if (data.access_token) {
-  //         const user = parseJwt(data.id_token); // Parse the ID token to get user info
-  //         dispatch(loginSuccess({ user, token: data.access_token }));
-  //       } else {
-  //         console.error("Failed to exchange authorization code for tokens");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during token exchange:", error);
-  //     }
-  //   }
-  // };
-  // Handle the redirect flow on component mount
-  // useEffect(() => {
-  //   handleRedirect();
-  //   window.history.replaceState({}, document.title, window.location.pathname);
-  // }, []);
-  // Fallback Redirect Login Function
-  // const handleGoogleLoginRedirect = () => {
-  //   const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
-  //     redirectUri
-  //   )}&response_type=code&scope=openid email profile`;
-  //   window.location.href = googleAuthUrl;
   const handleLoginSuccess = async (tokenResponse) => {
     try {
       // console.log("Token Response:=", tokenResponse);
@@ -147,6 +87,37 @@ const Login = () => {
     onSuccess: handleLoginSuccess,
     // onError: () => console.log("Google Login Failed"),
   });
+  const handleOpenPopup = () => {
+    // Open a new popup window
+    const popupWindow = window.open(
+      "", // URL of the popup
+      "_blank", // Target (opens in a new tab or window)
+      "width=600,height=400,scrollbars=yes,resizable=yes" // Popup window settings
+    );
+    // if (!popupWindow) {
+    //   alert("Popup blocked! Please allow popups for this website.");
+    // }
+    if (popupWindow) {
+      popupWindow.document.write(`
+        <div id="popup-root"></div>
+      `);
+      popupWindow.document.close();
+      // Render the React component in the popup
+      const popupRoot = popupWindow.document.getElementById("popup-root");
+      if (popupRoot) {
+        setShowPopup(true);
+        const root = ReactDOM.createRoot(popupRoot);
+        root.render(
+          <ForgetPasswordPopup
+            onClose={() => {
+              setShowPopup(false);
+              root.unmount(); // Clean up after closing the popup
+            }}
+          />
+        );
+      }
+    }
+  };
   return (
     <>
       <div className="flex flex-col space-y-4 w-5/12">
@@ -181,7 +152,10 @@ const Login = () => {
           className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <div className="flex flex-row justify-end mt-7">
-          <button className="text-blue-600">Forget Password?</button>
+          <button className="text-blue-600" onClick={handleOpenPopup}>
+            Forget Password?
+          </button>
+          {showPopup && <div id="popup-root"></div>}
         </div>
         <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
           <button type="submit">Sing In</button>
