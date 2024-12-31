@@ -11,6 +11,7 @@ import "./App.css";
 // import LoginPage2 from "./pages/LoginPage";
 import LoginPage from "./pages/auth";
 import { ChatDashboard } from "./chatPages/chatDashbord.jsx";
+// import ForgetPasswordPopup from "./pages/ForgetPasswordPopup.jsx";
 // import ChatDashboard from "./chatPages/chatDashbord.jsx";
 
 function App() {

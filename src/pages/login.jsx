@@ -4,19 +4,16 @@ import ReactDOM from "react-dom/client";
 import { useState, useEffect } from "react";
 import { loginSuccess } from "../slices/userSlice";
 import { useGoogleLogin } from "@react-oauth/google";
-// import { Link } from "react-router-dom";
-// import { jwtDecode } from "jwt-decode";
-// import { GoogleLogin } from "@react-oauth/google";
-// import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
-import { toast } from "../components/ui/use-toast";
+import { Toaster } from "react-hot-toast";
 import ForgetPasswordPopup from "./ForgetPasswordPopup";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const dispatch = useDispatch();
   const clientId =
     "973714267326-ur64lcfoj5g7st6lo39kgo1r952pl79i.apps.googleusercontent.com";
   const redirectUri = "http://localhost:5173/chatDashbord";
-
+  const queryClient = new QueryClient();
   const handleLoginSuccess = async (tokenResponse) => {
     try {
       // console.log("Token Response:=", tokenResponse);
@@ -87,34 +84,46 @@ const Login = () => {
     onSuccess: handleLoginSuccess,
     // onError: () => console.log("Google Login Failed"),
   });
+
   const handleOpenPopup = () => {
     // Open a new popup window
     const popupWindow = window.open(
-      "", // URL of the popup
+      "exapmle.com", // URL of the popup
       "_blank", // Target (opens in a new tab or window)
       "width=600,height=400,scrollbars=yes,resizable=yes" // Popup window settings
     );
-    // if (!popupWindow) {
-    //   alert("Popup blocked! Please allow popups for this website.");
-    // }
+
     if (popupWindow) {
       popupWindow.document.write(`
-        <div id="popup-root"></div>
-      `);
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <title>Forget Password</title>
+        </head>
+        <body>
+          <div id="popup-root"></div>
+        </body>
+      </html>
+    `);
       popupWindow.document.close();
       // Render the React component in the popup
       const popupRoot = popupWindow.document.getElementById("popup-root");
       if (popupRoot) {
-        setShowPopup(true);
+        // setShowPopup(true);
         const root = ReactDOM.createRoot(popupRoot);
         root.render(
-          <ForgetPasswordPopup
-            onClose={() => {
-              setShowPopup(false);
-              root.unmount(); // Clean up after closing the popup
-            }}
-          />
+          <QueryClientProvider client={queryClient}>
+            <Toaster position="top-right" reverseOrder={false} />
+            <ForgetPasswordPopup
+              onClose={() => {
+                root.unmount(); // Clean up the React component
+                popupWindow.close(); // Close the popup window
+              }}
+            />
+          </QueryClientProvider>
         );
+      } else {
+        alert("Popup blocked! Please allow popups for this website.");
       }
     }
   };
@@ -155,7 +164,7 @@ const Login = () => {
           <button className="text-blue-600" onClick={handleOpenPopup}>
             Forget Password?
           </button>
-          {showPopup && <div id="popup-root"></div>}
+          {/* {showPopup && <div id="popup-root"></div>} */}
         </div>
         <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
           <button type="submit">Sing In</button>
