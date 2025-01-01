@@ -4,9 +4,10 @@ import ReactDOM from "react-dom/client";
 import { useState, useEffect } from "react";
 import { loginSuccess } from "../slices/userSlice";
 import { useGoogleLogin } from "@react-oauth/google";
-import { Toaster } from "react-hot-toast";
 import ForgetPasswordPopup from "./ForgetPasswordPopup";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
+import { toast } from "../components/ui/use-toast";
 const Login = () => {
   const [showPopup, setShowPopup] = useState(false);
   const dispatch = useDispatch();

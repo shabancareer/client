@@ -80,7 +80,6 @@ const Singup = () => {
     // Optionally reset the form
     reset();
   };
-
   return (
     <>
       <form
@@ -124,7 +123,6 @@ const Singup = () => {
           {...register("email", { required: "Email is required" })}
         />
         {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-
         <input
           type="password"
           name="password"
@@ -135,7 +133,6 @@ const Singup = () => {
         {errors.password && (
           <p className="text-red-500">{errors.password.message}</p>
         )}
-
         <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
           <button type="submit">
             {mutation.isLoading ? "Creating..." : ""}

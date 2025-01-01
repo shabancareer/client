@@ -8,19 +8,21 @@ import { toast } from "../components/ui/use-toast";
 const ForgetPasswordPopup = () => {
   const [email, setEmail] = useState("");
   // console.log("Email:=", email);
-  const userEmail = email.email;
   const mutation = useMutation({
     mutationFn: () =>
-      axios.post(("http://localhost:3000/api/forgotpass", { userEmail }), {
-        headers: { "Content-Type": "multipart/form-data" },
-      }),
+      axios.post(
+        "http://localhost:3000/api/forgotpass",
+        { email },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      ),
     onSuccess: () => {
       toast({
         title: "Success",
-        description: "Password reset email sent successfully!",
+        description: "Password reset email sent successfully.",
         variant: "success",
       });
-      setEmail(""); // Clear the email field
     },
     onError: (error) => {
       toast({
@@ -42,7 +44,7 @@ const ForgetPasswordPopup = () => {
       return;
     }
     // sendForgetPasswordRequest();
-    mutation.mutate();
+    mutation.mutate(email);
   };
 
   return (
