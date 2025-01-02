@@ -23,6 +23,7 @@ const ForgetPasswordPopup = () => {
         description: "Password reset email sent successfully.",
         variant: "success",
       });
+      setEmail("");
     },
     onError: (error) => {
       toast({
@@ -32,7 +33,6 @@ const ForgetPasswordPopup = () => {
       });
     },
   });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email) {

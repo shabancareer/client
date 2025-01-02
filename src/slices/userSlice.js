@@ -9,7 +9,7 @@ const initialState = {
   isAuthenticated: false,
 };
 const authSlice = createSlice({
-  name: "UserAuth",
+  name: "auth",
   initialState,
   reducers: {
     setMood: (state) => {
@@ -19,6 +19,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
+      // console.log("Action:=", action);
     },
     logout: (state) => {
       state.user = null;

@@ -8,17 +8,13 @@ import { useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import "./App.css";
 import LoginPage from "./pages/auth";
-import { ChatDashboard } from "./chatPages/chatDashbord.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
-
-// import AuthCallback from "./Api/authcheck";
-// import LoginPage2 from "./pages/LoginPage";
-// import ForgetPasswordPopup from "./pages/ForgetPasswordPopup.jsx";
-// import ChatDashboard from "./chatPages/chatDashbord.jsx";
-
+import ChatDashboard from "./chatPages/chatDashbord.jsx";
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  const isAuth = Boolean(useSelector((state) => state.auth.token));
+
   // const responseMessage = (response) => {
   //   console.log(response);
   // };
@@ -34,10 +30,13 @@ function App() {
           <Toaster position="top-right" className="mt-5 pos" />
           <Routes>
             {/* Other routes */}
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/chatDashbord" element={<ChatDashboard />} />
+            <Route
+              path="/"
+              element={isAuth ? <ChatDashboard /> : <LoginPage />}
+            />
             <Route path="/auth/callback" element={<AuthCheck />} />
             <Route path="/resetpass/:resetToken" element={<ResetPassword />} />
+            {/* <Route path="/ChatDashboard" element={<ChatDashboard />} /> */}
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

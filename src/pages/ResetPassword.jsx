@@ -1,31 +1,53 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "../components/ui/use-toast";
+
 // import { response } from "express";
 
 const ResetPassword = () => {
   const { resetToken } = useParams();
+  const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  console.log(resetToken);
-  const handleReset = async (e) => {
+
+  const mutation = useMutation({
+    mutationFn: (newPassword) =>
+      axios.patch(`http://localhost:3000/api/resetpass/${resetToken}`, {
+        password: newPassword,
+      }),
+    onSuccess: () => {
+      // alert("Password reset successfully!");
+      toast({
+        title: "Success",
+        description: "Password reset successfully!.",
+        variant: "success",
+      });
+      navigate("/", { state: { message: "Password reset successfully!" } });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error in resetting",
+        description: "Error resetting password. Please try again.",
+        variant: "destructive",
+      });
+      console.error(error);
+    },
+  });
+  const handleReset = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      toast({
+        title: "Error in Matching",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
       return;
     }
-    try {
-      const response = await axios.patch(
-        `http://localhost:3000/api/resetpass/${resetToken}`,
-        { password }
-      );
-      console.log(response);
-      alert("Password reset successfully!");
-    } catch (error) {
-      console.error(error);
-      alert("Error resetting password");
-    }
+    mutation.mutate(password);
   };
+
   return (
     <div
       style={{
