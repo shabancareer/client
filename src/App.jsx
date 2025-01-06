@@ -14,7 +14,7 @@ function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.auth.token));
-
+  console.log(isAuth);
   // const responseMessage = (response) => {
   //   console.log(response);
   // };

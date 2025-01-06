@@ -3,9 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "../components/ui/use-toast";
-
 // import { response } from "express";
-
 const ResetPassword = () => {
   const { resetToken } = useParams();
   const navigate = useNavigate();

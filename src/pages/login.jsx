@@ -1,11 +1,26 @@
 import ReactDOM from "react-dom/client";
+import React, { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import ForgetPasswordPopup from "./ForgetPasswordPopup";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import { useMutation } from "react-query";
+import axios from "axios";
 import useGoogleLoginHandler from "./hooks/useGoogleLoginHandler";
 
+const loginUser = async ({ email, password }) => {
+  // e.preventDefault();
+  const response = await axios.post("http://localhost:300/api/login", {
+    email,
+    password,
+  });
+  return response.data; // Assumes the API returns the token and user info
+};
+
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const queryClient = new QueryClient();
   const handleLoginSuccess = useGoogleLoginHandler();
 
@@ -54,6 +69,14 @@ const Login = () => {
       }
     }
   };
+  const userLoginMutation = useMutation({
+    mutationFn: () => loginUser(),
+  });
+  console.log(userLoginMutation);
+  // const userLogin = (e) => {
+  //   e.preventDefault();
+  //   e.preventDefault();
+  // };
   return (
     <>
       <div className="flex flex-col space-y-4 w-5/12">
@@ -69,24 +92,35 @@ const Login = () => {
           </button>
         </div>
         <p className="flex flex-row justify-center">Or:</p>
-        <input
-          type="email"
-          placeholder="Enter your Email"
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="password"
-          placeholder="Enter your Password"
-          className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <div className="flex flex-row justify-end mt-7">
-          <button className="text-blue-600" onClick={handleOpenPopup}>
-            Forget Password?
-          </button>
-        </div>
-        <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
-          <button type="submit">Sing In</button>
-        </div>
+        <form className="flex flex-col justify-evenly">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your Email"
+            className="mb-4 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            type="password"
+            placeholder="Enter your Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div className="flex flex-row justify-end mt-7">
+            <button className="text-blue-600" onClick={handleOpenPopup}>
+              Forget Password?
+            </button>
+          </div>
+          <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
+            <button
+              type="submit"
+              onClick={() => userLoginMutation.mutate({ email, password })}
+            >
+              Sing-In
+            </button>
+          </div>
+        </form>
       </div>
       <div>
         <div className="flex flex-row pt-4">
