@@ -7,20 +7,15 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import "./App.css";
-import LoginPage from "./pages/auth";
+import UserAuth from "./pages/UserAuth.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import ChatDashboard from "./chatPages/chatDashbord.jsx";
+
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.auth.token));
-  console.log(isAuth);
-  // const responseMessage = (response) => {
-  //   console.log(response);
-  // };
-  // const errorMessage = (error) => {
-  //   console.log(error);
-  // };
+
   return (
     <div>
       {/* <React.StrictMode> */}
@@ -32,7 +27,7 @@ function App() {
             {/* Other routes */}
             <Route
               path="/"
-              element={isAuth ? <ChatDashboard /> : <LoginPage />}
+              element={isAuth ? <ChatDashboard /> : <UserAuth />}
             />
             <Route path="/auth/callback" element={<AuthCheck />} />
             <Route path="/resetpass/:resetToken" element={<ResetPassword />} />

@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 // import { loginSuccess } from "../slices/userSlice";
 // import { Link } from "react-router";
-import Singup from "./singup";
+import SingUp from "./singUp";
 import Login from "./login";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "../components/ui/use-toast";
-const Userauth = () => {
+// import { useQueryClient } from "@tanstack/react-query";
+
+const UserAuth = () => {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("Table1");
+  // const queryClient = useQueryClient();
+  // console.log("QueryClient inside UserAuth:", queryClient);
 
   useEffect(() => {
     const emailVerified = searchParams.get("emailVerified");
@@ -45,10 +49,10 @@ const Userauth = () => {
             </button>
           </div>
         </div>
-        {activeTab === "Table1" ? <Login /> : <Singup />}
+        {activeTab === "Table1" ? <Login /> : <SingUp />}
       </div>
     </>
   );
 };
 
-export default Userauth;
+export default UserAuth;

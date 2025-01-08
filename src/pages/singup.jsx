@@ -8,7 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import googleImg from "../../public/assets/images/google.svg";
 import { toast } from "../components/ui/use-toast";
 
-const Singup = () => {
+const SingUp = () => {
   const navigate = useNavigate();
   // Extract token from URL
   const queryParams = new URLSearchParams(window.location.search);
@@ -149,4 +149,4 @@ const Singup = () => {
   );
 };
 
-export default Singup;
+export default SingUp;

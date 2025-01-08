@@ -1,14 +1,13 @@
-import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";
+import { useMutation } from "react-query";
+
 import { useDispatch } from "react-redux";
 import { toast } from "../../components/ui/use-toast";
 import { loginSuccess } from "../../slices/userSlice";
-// import { useNavigate } from "react-router-dom";
-// import ChatDashboard from "../../chatPages/chatDashbord";
-// import { toast } from "../components/ui/use-toast";
+
 const useGoogleLoginHandler = () => {
+  // const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
-  //   const redirectUri = "http://localhost:5173/chatDashbord";
 
   const loginWithBackend = useMutation({
     mutationFn: async (userInfo) => {

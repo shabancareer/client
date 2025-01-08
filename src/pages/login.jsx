@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom/client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import ForgetPasswordPopup from "./ForgetPasswordPopup";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -72,7 +72,7 @@ const Login = () => {
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser(),
   });
-  console.log(userLoginMutation);
+  // console.log(userLoginMutation);
   // const userLogin = (e) => {
   //   e.preventDefault();
   //   e.preventDefault();
