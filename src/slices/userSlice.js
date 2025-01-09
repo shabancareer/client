@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   mode: "light",
   user: null,
+  email: null,
   token: null,
   chats: [],
   selectChat: null,
@@ -16,10 +17,12 @@ const authSlice = createSlice({
       state.mode = state.mode === "light" ? "dark" : "light";
     },
     loginSuccess: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+      const { user, token, email } = action.payload;
+      state.user = user;
+      state.email = email;
+      state.token = token;
       state.isAuthenticated = true;
-      // console.log("Action:=", action);
+      // console.log("Action:=", action.payload);
     },
     logout: (state) => {
       state.user = null;

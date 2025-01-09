@@ -2,7 +2,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";
+import { useMutation } from "react-query";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import googleImg from "../../public/assets/images/google.svg";
@@ -136,7 +137,7 @@ const SingUp = () => {
         <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
           <button type="submit">
             {mutation.isLoading ? "Creating..." : ""}
-            Sing Up
+            Sing-Up
           </button>
         </div>
       </form>

@@ -4,23 +4,28 @@ import { useGoogleLogin } from "@react-oauth/google";
 import ForgetPasswordPopup from "./ForgetPasswordPopup";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import { toast } from "../components/ui/use-toast";
 import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import useGoogleLoginHandler from "./hooks/useGoogleLoginHandler";
+import { loginSuccess } from "../slices/userSlice";
+
+// import { response } from "express";
 
 const loginUser = async ({ email, password }) => {
-  // e.preventDefault();
-  const response = await axios.post("http://localhost:300/api/login", {
+  const response = await axios.post("http://localhost:3000/api/login", {
     email,
     password,
   });
+  // console.log(response.data);
   return response.data; // Assumes the API returns the token and user info
 };
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const dispatch = useDispatch();
+  // console.log(email, password);
   const queryClient = new QueryClient();
   const handleLoginSuccess = useGoogleLoginHandler();
 
@@ -70,13 +75,36 @@ const Login = () => {
     }
   };
   const userLoginMutation = useMutation({
-    mutationFn: () => loginUser(),
+    mutationFn: () => loginUser({ email, password }),
+    onSuccess: (data) => {
+      // Extract email and accessToken
+      const { email, name } = data.data; // Email is inside `data.data`
+      const { accessToken } = data;
+      // console.log(data);
+      // Dispatch Redux action to update the auth state
+      dispatch(loginSuccess({ email, name, accessToken }));
+      toast({
+        title: "Login successful!",
+        description: `Welcome back you are login`,
+        variant: "success",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Login failed",
+        description:
+          error.response?.data?.message ||
+          "Something went wrong when user Login ",
+        variant: "destructive",
+      });
+    },
   });
-  // console.log(userLoginMutation);
-  // const userLogin = (e) => {
-  //   e.preventDefault();
-  //   e.preventDefault();
-  // };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    userLoginMutation.mutate({ email, password });
+  };
+
   return (
     <>
       <div className="flex flex-col space-y-4 w-5/12">
@@ -92,7 +120,7 @@ const Login = () => {
           </button>
         </div>
         <p className="flex flex-row justify-center">Or:</p>
-        <form className="flex flex-col justify-evenly">
+        <form className="flex flex-col justify-evenly" onSubmit={handleSubmit}>
           <input
             type="email"
             value={email}
@@ -113,19 +141,14 @@ const Login = () => {
             </button>
           </div>
           <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
-            <button
-              type="submit"
-              onClick={() => userLoginMutation.mutate({ email, password })}
-            >
-              Sing-In
-            </button>
+            <button type="submit">Sing-In</button>
           </div>
         </form>
       </div>
       <div>
         <div className="flex flex-row pt-4">
           <h4 className="px-3">Not a Member?</h4>
-          <button className="text-blue-800"> Sing Up</button>
+          <button className="text-blue-800"> Sing-Up</button>
         </div>
       </div>
     </>
