@@ -76,25 +76,58 @@ const Login = () => {
   };
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser({ email, password }),
-    onSuccess: (data) => {
-      // Extract email and accessToken
-      const { email, name } = data.data; // Email is inside `data.data`
-      const { accessToken } = data;
-      // console.log(data);
-      // Dispatch Redux action to update the auth state
-      dispatch(loginSuccess({ email, name, accessToken }));
+    // onSuccess: (backendResult) => {
+    //   // Extract email and accessToken
+    //   const { email, name } = data.data; // Email is inside `data.data`
+    //   const { accessToken } = data;
+    //   // console.log(data);
+    //   // Dispatch Redux action to update the auth state
+    //   dispatch(loginSuccess({ email, name, accessToken }));
+    //   toast({
+    //     title: "Login successful!",
+    //     description: `Welcome back you are login`,
+    //     variant: "success",
+    //   });
+    // },
+    // onError: (error) => {
+    //   toast({
+    //     title: "Login failed",
+    //     description:
+    //       error.response?.data?.message ||
+    //       "Something went wrong when user Login ",
+    //     variant: "destructive",
+    //   });
+    // },
+
+    onSuccess: (backendResult) => {
+      if (!backendResult.success) {
+        toast({
+          title: "Login Failed!..",
+          description: backendResult.error,
+          variant: "destructive",
+        });
+        return;
+      }
+      //   console.log(backendResult);
+      dispatch(
+        loginSuccess({
+          token: backendResult.accessToken,
+          user: backendResult.data,
+        })
+      );
       toast({
-        title: "Login successful!",
-        description: `Welcome back you are login`,
+        title: "Welcome!",
+        description: `Hello, ${backendResult.data.name}. Login successful!`,
         variant: "success",
       });
+      //   navigate(<ChatDashboard />);
     },
     onError: (error) => {
       toast({
-        title: "Login failed",
-        description:
-          error.response?.data?.message ||
-          "Something went wrong when user Login ",
+        title: "Login Error",
+        description: `${
+          error.message || "An error occurred while logging in."
+        }`,
         variant: "destructive",
       });
     },
