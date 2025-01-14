@@ -103,7 +103,7 @@ const Login = () => {
       if (!backendResult.success) {
         toast({
           title: "Login Failed!..",
-          description: backendResult.error,
+          description: `${backendResult.error}` || "Invalid credentials",
           variant: "destructive",
         });
         return;
@@ -122,12 +122,10 @@ const Login = () => {
       });
       //   navigate(<ChatDashboard />);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
-        title: "Login Error",
-        description: `${
-          error.message || "An error occurred while logging in."
-        }`,
+        title: "Login Failed!..",
+        description: "Invalid credentials",
         variant: "destructive",
       });
     },
