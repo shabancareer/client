@@ -32,7 +32,6 @@ const Login = () => {
   const loginWithGoogle = useGoogleLogin({
     onSuccess: handleLoginSuccess,
   });
-
   const handleOpenPopup = () => {
     const popupWindow = window.open(
       "exapmle.com", // URL of the popup

@@ -8,7 +8,6 @@ import { loginSuccess } from "../../slices/userSlice";
 const useGoogleLoginHandler = () => {
   // const queryClient = useQueryClient();
   const dispatch = useDispatch();
-
   const loginWithBackend = useMutation({
     mutationFn: async (userInfo) => {
       const response = await fetch("http://localhost:3000/api/googleLogin", {
@@ -17,7 +16,9 @@ const useGoogleLoginHandler = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(userInfo),
+        credentials: "include", // Ensures cookies are sent
       });
+      // console.log(userInfo);
       if (!response.ok) {
         throw new Error("Failed to log in with backend");
       }
@@ -32,13 +33,15 @@ const useGoogleLoginHandler = () => {
         });
         return;
       }
-      //   console.log(backendResult);
+      // console.log(backendResult);
       dispatch(
         loginSuccess({
           token: backendResult.accessToken,
           user: backendResult.data,
         })
       );
+      // Store the access token in localStorage
+      localStorage.setItem("accessToken", backendResult.accessToken);
       toast({
         title: "Welcome!",
         description: `Hello, ${backendResult.data.name}. Login successful!`,
@@ -49,9 +52,7 @@ const useGoogleLoginHandler = () => {
     onError: (error) => {
       toast({
         title: "Login Error",
-        description: `${
-          error.message || "An error occurred while logging in."
-        }`,
+        description: `"E-mail Cannot find user with these credentials. Please singUp first"${error.message}`,
         variant: "destructive",
       });
     },
