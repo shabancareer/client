@@ -11,16 +11,19 @@ import axios from "axios";
 import useGoogleLoginHandler from "./hooks/useGoogleLoginHandler";
 import { loginSuccess } from "../slices/userSlice";
 
-// import { response } from "express";
-
 const loginUser = async ({ email, password }) => {
-  const response = await axios.post("http://localhost:3000/api/login", {
-    email,
-    password,
-  });
-  // console.log(response.data);
+  const response = await axios.post(
+    "http://localhost:3000/api/login",
+    {
+      email,
+      password,
+    },
+    { withCredentials: true }
+  );
+  console.log(response.data);
   return response.data; // Assumes the API returns the token and user info
 };
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -75,30 +78,8 @@ const Login = () => {
   };
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser({ email, password }),
-    // onSuccess: (backendResult) => {
-    //   // Extract email and accessToken
-    //   const { email, name } = data.data; // Email is inside `data.data`
-    //   const { accessToken } = data;
-    //   // console.log(data);
-    //   // Dispatch Redux action to update the auth state
-    //   dispatch(loginSuccess({ email, name, accessToken }));
-    //   toast({
-    //     title: "Login successful!",
-    //     description: `Welcome back you are login`,
-    //     variant: "success",
-    //   });
-    // },
-    // onError: (error) => {
-    //   toast({
-    //     title: "Login failed",
-    //     description:
-    //       error.response?.data?.message ||
-    //       "Something went wrong when user Login ",
-    //     variant: "destructive",
-    //   });
-    // },
-
     onSuccess: (backendResult) => {
+      console.log(backendResult);
       if (!backendResult.success) {
         toast({
           title: "Login Failed!..",
@@ -107,13 +88,14 @@ const Login = () => {
         });
         return;
       }
-      //   console.log(backendResult);
       dispatch(
         loginSuccess({
           token: backendResult.accessToken,
           user: backendResult.data,
         })
       );
+      // Store the access token in localStorage
+      localStorage.setItem("accessToken", backendResult.accessToken);
       toast({
         title: "Welcome!",
         description: `Hello, ${backendResult.data.name}. Login successful!`,

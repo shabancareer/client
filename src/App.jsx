@@ -14,7 +14,7 @@ import ChatDashboard from "./chatPages/chatDashbord.jsx";
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-  const isAuth = Boolean(useSelector((state) => state.auth.token));
+  const isAuth = Boolean(useSelector((state) => state.token));
 
   return (
     <div>
