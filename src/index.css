@@ -4,14 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* html,
+html,
 body,
 #root,
 .app {
   height: 100%;
   width: 100%;
   font-family: "Rubik", sans-serif;
-} */
+  /* background-color: blue; */
+}
 
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

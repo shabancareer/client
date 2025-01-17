@@ -20,7 +20,7 @@ const loginUser = async ({ email, password }) => {
     },
     { withCredentials: true }
   );
-  console.log(response.data);
+  // console.log(response.data);
   return response.data; // Assumes the API returns the token and user info
 };
 
@@ -79,7 +79,7 @@ const Login = () => {
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser({ email, password }),
     onSuccess: (backendResult) => {
-      console.log(backendResult);
+      // console.log(backendResult);
       if (!backendResult.success) {
         toast({
           title: "Login Failed!..",
