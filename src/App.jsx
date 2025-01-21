@@ -6,15 +6,16 @@ import { themeSettings } from "../theme";
 import AuthCheck from "./Api/authcheck.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { Toaster } from "react-hot-toast";
+import apiClient from "./Api/apiClient.js"; // Axios instance with credentials enabled
 // import { toast } from "../components/ui/use-toast";
-import { toast } from "./components/ui/use-toast.jsx";
+// import { toast } from "./components/ui/use-toast.jsx";
 
 import "./App.css";
 import UserAuth from "./pages/UserAuth.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import ChatDashboard from "./chatPages/chatDashbord.jsx";
 import isTokenExpired from "./Api/accessToken.js";
-import { logout } from "./slices/userSlice.js";
+import { loginSuccess, logout } from "./slices/userSlice.js";
 
 function App() {
   // const isAuth = Boolean(useSelector((state) => state.token));
@@ -25,32 +26,41 @@ function App() {
 
   useEffect(() => {
     if (!isAuth) return;
+    const handleTokenRefresh = async () => {
+      try {
+        // Call your refresh endpoint
+        const response = await apiClient.post(
+          "http://localhost:3000/api/reauth",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`, // Access token in the header
+            },
+            withCredentials: true, // Send cookies
+          }
+        );
+        console.log(response);
+        const { accessToken } = response.data;
+        dispatch(loginSuccess(accessToken)); // Update Redux state with the new access token
+        console.log("Access token refreshed successfully.");
+      } catch (error) {
+        console.error("Failed to refresh token. Logging out.", error);
+        dispatch(logout()); // Log out user if refresh fails
+      }
+    };
     const remainingTime = isTokenExpired(isAuth);
-
     if (remainingTime > 0) {
       // Set a timeout to logout the user when the token expires
       const logoutTimer = setTimeout(() => {
-        dispatch(logout());
-        console.log("Token expired. User logged out automatically.");
+        handleTokenRefresh();
+        // dispatch(logout());
+        // console.log("Token expired. User logged out automatically.");
       }, remainingTime);
-
       // Clear the timeout if the token changes (e.g., user logs in with a new token)
       return () => clearTimeout(logoutTimer);
     } else {
-      // If token is already expired, log the user out immediately
-      dispatch(logout());
-    }
-    if (remainingTime > 5000) {
-      // Notify 5 seconds before logout
-      setTimeout(() => {
-        toast({
-          title: "Login out",
-          description:
-            "Your session is about to expire. Please save your work.",
-          variant: "destructive",
-        });
-        // alert("Your session is about to expire. Please save your work.");
-      }, remainingTime - 5000);
+      // Token already expired, try refreshing immediately
+      handleTokenRefresh();
+      // dispatch(logout());
     }
   }, [isAuth, dispatch]);
 
