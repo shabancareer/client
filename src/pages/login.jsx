@@ -23,7 +23,6 @@ const loginUser = async ({ email, password }) => {
   // console.log(response.data);
   return response.data; // Assumes the API returns the token and user info
 };
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

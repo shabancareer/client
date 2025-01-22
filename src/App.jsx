@@ -6,7 +6,8 @@ import { themeSettings } from "../theme";
 import AuthCheck from "./Api/authcheck.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { Toaster } from "react-hot-toast";
-import apiClient from "./Api/apiClient.js"; // Axios instance with credentials enabled
+import axios from "axios";
+// import apiClient from "./Api/apiClient.js"; // Axios instance with credentials enabled
 // import { toast } from "../components/ui/use-toast";
 // import { toast } from "./components/ui/use-toast.jsx";
 
@@ -26,21 +27,29 @@ function App() {
 
   useEffect(() => {
     if (!isAuth) return;
+    // console.log("Accesstoken as A IsAuth:=", isAuth);
     const handleTokenRefresh = async () => {
       try {
         // Call your refresh endpoint
-        const response = await apiClient.post(
+        const response = await axios.post(
           "http://localhost:3000/api/reauth",
+          //
+          {},
           {
             headers: {
-              Authorization: `Bearer ${accessToken}`, // Access token in the header
+              Authorization: `Bearer ${isAuth}`, // Access token in the header
             },
             withCredentials: true, // Send cookies
           }
         );
-        console.log(response);
         const { accessToken } = response.data;
-        dispatch(loginSuccess(accessToken)); // Update Redux state with the new access token
+        console.log("New access token:", accessToken);
+        // dispatch(loginSuccess(accessToken)); // Update Redux state with the new access token
+        dispatch(
+          loginSuccess({
+            token: accessToken,
+          })
+        );
         console.log("Access token refreshed successfully.");
       } catch (error) {
         console.error("Failed to refresh token. Logging out.", error);
@@ -54,7 +63,7 @@ function App() {
         handleTokenRefresh();
         // dispatch(logout());
         // console.log("Token expired. User logged out automatically.");
-      }, remainingTime);
+      }, remainingTime - 60000);
       // Clear the timeout if the token changes (e.g., user logs in with a new token)
       return () => clearTimeout(logoutTimer);
     } else {

@@ -3,7 +3,7 @@ const isTokenExpired = (token) => {
   // console.log(token);
   try {
     const decoded = jwtDecode(token);
-    console.log(decoded);
+    // console.log(decoded);
     const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
     const timeRemaining = decoded.exp - currentTime + 60; // Time left in seconds
     // return timeRemaining > 0 ? timeRemaining * 1000 : 0;
