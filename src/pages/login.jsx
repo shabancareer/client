@@ -27,7 +27,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  // console.log(email, password);
   const queryClient = new QueryClient();
   const handleLoginSuccess = useGoogleLoginHandler();
 
@@ -78,11 +77,6 @@ const Login = () => {
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser({ email, password }),
     onSuccess: (backendResult) => {
-      // console.log("Uer login with form backend Data=:", backendResult.data);
-      // console.log(
-      //   "Uer login with form backend Data token=:",
-      //   backendResult.accessToken
-      // );
       if (!backendResult.success) {
         toast({
           title: "Login Failed!..",

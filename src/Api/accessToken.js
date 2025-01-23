@@ -1,17 +1,18 @@
 import { jwtDecode } from "jwt-decode";
 const isTokenExpired = (token) => {
-  // console.log(token);
   try {
     const decoded = jwtDecode(token);
-    // console.log(decoded);
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-    const timeRemaining = decoded.exp - currentTime + 60; // Time left in seconds
-    // return timeRemaining > 0 ? timeRemaining * 1000 : 0;
-    // return decoded.exp < currentTime; // Check if the token is expired
-    return timeRemaining > 0 ? timeRemaining * 1000 : 0; // Return in milliseconds
+    const currentTime = Math.floor(Date.now() / 1000);
+    const timeRemaining = decoded.exp - currentTime;
+    // Ensure the function accounts for the 24-hour policy
+    // const twentyFourHoursInSeconds = 24 * 60 * 60; // 86400 seconds
+    // const isValid =
+    // timeRemaining > 0 && timeRemaining <= twentyFourHoursInSeconds;
+    // return isValid ? timeRemaining * 1000 : 0; // Convert to milliseconds
+    return timeRemaining > 0 ? timeRemaining * 1000 : 0;
   } catch (error) {
     console.error("Error decoding token:", error);
-    return 0; // Treat invalid token as expired
+    return 0;
   }
 };
 export default isTokenExpired;

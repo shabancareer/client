@@ -27,45 +27,41 @@ function App() {
 
   useEffect(() => {
     if (!isAuth) return;
-    // console.log("Accesstoken as A IsAuth:=", isAuth);
     const handleTokenRefresh = async () => {
       try {
-        // Call your refresh endpoint
         const response = await axios.post(
           "http://localhost:3000/api/reauth",
           //
           {},
           {
             headers: {
-              Authorization: `Bearer ${isAuth}`, // Access token in the header
+              Authorization: `Bearer ${isAuth}`,
             },
-            withCredentials: true, // Send cookies
+            withCredentials: true,
           }
         );
+        // console.log(response);
         const { accessToken } = response.data;
-        console.log("New access token:", accessToken);
-        // dispatch(loginSuccess(accessToken)); // Update Redux state with the new access token
         dispatch(
           loginSuccess({
             token: accessToken,
           })
         );
-        console.log("Access token refreshed successfully.");
       } catch (error) {
         console.error("Failed to refresh token. Logging out.", error);
-        dispatch(logout()); // Log out user if refresh fails
+        dispatch(logout());
       }
     };
     const remainingTime = isTokenExpired(isAuth);
     if (remainingTime > 0) {
       // Set a timeout to logout the user when the token expires
-      const logoutTimer = setTimeout(() => {
+      const refreshTimer = setTimeout(() => {
         handleTokenRefresh();
         // dispatch(logout());
         // console.log("Token expired. User logged out automatically.");
       }, remainingTime - 60000);
       // Clear the timeout if the token changes (e.g., user logs in with a new token)
-      return () => clearTimeout(logoutTimer);
+      return () => clearTimeout(refreshTimer);
     } else {
       // Token already expired, try refreshing immediately
       handleTokenRefresh();
