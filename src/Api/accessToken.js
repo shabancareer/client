@@ -1,15 +1,15 @@
 import { jwtDecode } from "jwt-decode";
+// import { useDispatch } from "react-redux";
+// import { logout } from "../slices/userSlice";
+
 const isTokenExpired = (token) => {
   try {
     const decoded = jwtDecode(token);
+    // console.log("decoded=:", decoded);
     const currentTime = Math.floor(Date.now() / 1000);
-    const timeRemaining = decoded.exp - currentTime;
-    // Ensure the function accounts for the 24-hour policy
-    // const twentyFourHoursInSeconds = 24 * 60 * 60; // 86400 seconds
-    // const isValid =
-    // timeRemaining > 0 && timeRemaining <= twentyFourHoursInSeconds;
-    // return isValid ? timeRemaining * 1000 : 0; // Convert to milliseconds
-    return timeRemaining > 0 ? timeRemaining * 1000 : 0;
+    // const timeRemaining = decoded.exp - currentTime;
+    const timeRemaining = (decoded.exp - currentTime) * 1000; // Remaining time in ms
+    return timeRemaining;
   } catch (error) {
     console.error("Error decoding token:", error);
     return 0;

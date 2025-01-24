@@ -22,7 +22,7 @@ const authSlice = createSlice({
       // state.email = email;
       state.token = token;
       state.isAuthenticated = true;
-      console.log("Action:=", action.payload.token);
+      // console.log("Action:=", action.payload.token);
     },
     logout: (state) => {
       state.user = null;

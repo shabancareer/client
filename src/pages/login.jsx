@@ -108,12 +108,10 @@ const Login = () => {
       });
     },
   });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     userLoginMutation.mutate({ email, password });
   };
-
   return (
     <>
       <div className="flex flex-col space-y-4 w-5/12">

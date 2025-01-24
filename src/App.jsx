@@ -10,7 +10,6 @@ import axios from "axios";
 // import apiClient from "./Api/apiClient.js"; // Axios instance with credentials enabled
 // import { toast } from "../components/ui/use-toast";
 // import { toast } from "./components/ui/use-toast.jsx";
-
 import "./App.css";
 import UserAuth from "./pages/UserAuth.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
@@ -24,7 +23,6 @@ function App() {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = useSelector((state) => state.token);
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (!isAuth) return;
     const handleTokenRefresh = async () => {
@@ -40,7 +38,7 @@ function App() {
             withCredentials: true,
           }
         );
-        // console.log(response);
+        console.log("Re-auth Res:=", response.data);
         const { accessToken } = response.data;
         dispatch(
           loginSuccess({
@@ -53,20 +51,44 @@ function App() {
       }
     };
     const remainingTime = isTokenExpired(isAuth);
+    // console.log(remainingTime);
     if (remainingTime > 0) {
-      // Set a timeout to logout the user when the token expires
-      const refreshTimer = setTimeout(() => {
+      // console.log(`Token will expire in ${remainingTime / 1000} seconds`);
+      setTimeout(() => {
         handleTokenRefresh();
-        // dispatch(logout());
-        // console.log("Token expired. User logged out automatically.");
-      }, remainingTime - 60000);
-      // Clear the timeout if the token changes (e.g., user logs in with a new token)
-      return () => clearTimeout(refreshTimer);
+      }, remainingTime);
     } else {
-      // Token already expired, try refreshing immediately
-      handleTokenRefresh();
-      // dispatch(logout());
+      console.log(
+        "Token is already expired. User will be logged out immediately."
+      );
+      dispatch(logout());
     }
+
+    // if (remainingTime <= 0) {
+    //   setTimeout(() => {
+    //     console.log("Token has expired.");
+    //     dispatch(logout());
+    //   }, remainingTime);
+    // }
+    // Set a timer to remove the token upon expiration
+
+    // console.log(remainingTime);
+    // console.log(interval);
+    // console.log("sddsd", interval);
+
+    // if (remainingTime <= 0) {
+    //   // dispatch(logout());
+    //   // Set a timeout to logout the user when the token expires
+    //   // const refreshTimer = setTimeout(() => {
+    //   //   // handleTokenRefresh();
+    //   //   // console.log("Token expired. User logged out automatically.");
+    //   // }, remainingTime - 30000);
+    //   // Clear the timeout if the token changes (e.g., user logs in with a new token)
+    //   return () => clearTimeout(refreshTimer);
+    // } else {
+    //   // Token already expired, try refreshing immediately
+    //   // handleTokenRefresh().catch(() => dispatch(logout()));
+    // }
   }, [isAuth, dispatch]);
 
   return (
