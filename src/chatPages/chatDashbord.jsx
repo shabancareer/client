@@ -1,13 +1,26 @@
-import Userleft from "./userleft";
+import { useState } from "react";
+import UserProfile from "./userProfile";
 import UserLeftChat from "./userleftchat";
-// import React from "react";
+import UserProfileSetting from "./userProfileSetting";
+
 const ChatDashboard = () => {
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleShowProfile = (user) => {
+    setSelectedUser(user); // Set the selected user data when clicked
+  };
   return (
     <>
       <div className="flex flex-row">
-        <Userleft />
-        <UserLeftChat />
-        <p>All chat</p>
+        <UserProfile onShowProfile={handleShowProfile} />
+        {/* {selectedUser && <UserProfileSetting user={selectedUser} />}
+        <UserLeftChat /> */}
+        {selectedUser ? (
+          <UserProfileSetting user={selectedUser} />
+        ) : (
+          <UserLeftChat />
+        )}
+        {/* <UserProfileSetting /> */}
       </div>
     </>
   );
