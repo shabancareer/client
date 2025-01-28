@@ -7,7 +7,7 @@ const UserProfile = ({ onShowProfile }) => {
   const [hovered, setHovered] = useState(false);
   return (
     <>
-      <div className="flex flex-col relative pb-5 items-center justify-end h-screen w-20 border-r-2 border-white bg-yellow-300">
+      <div className="flex flex-col relative pb-5 items-center justify-end h-screen border-r-2 border-white bg-yellow-300">
         <div className="absolute top-5">
           <h2>Shaban Ali</h2>
         </div>

@@ -8,13 +8,13 @@ const ChatDashboard = () => {
 
   const handleShowProfile = (user) => {
     setSelectedUser(user); // Set the selected user data when clicked
+    // console.log(user);
   };
   return (
     <>
       <div className="flex flex-row">
         <UserProfile onShowProfile={handleShowProfile} />
-        {/* {selectedUser && <UserProfileSetting user={selectedUser} />}
-        <UserLeftChat /> */}
+
         {selectedUser ? (
           <UserProfileSetting user={selectedUser} />
         ) : (
