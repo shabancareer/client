@@ -10,13 +10,11 @@ export const queryClient = new QueryClient({
     },
   },
 });
-
-// / Custom hook for updating user photo
+// Custom hook for updating user photo
 const useUpdateUserPhoto = () => {
   const queryClient = useQueryClient();
-
   return useMutation(
-    async ({ userId, file, token }) => {
+    async ({ userId, file }) => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("userId", userId);
@@ -28,18 +26,21 @@ const useUpdateUserPhoto = () => {
           // headers: { "Content-Type": "multipart/form-data" },
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // Add the token here
+            // Authorization: `Bearer ${token}`, // Add the token here
           },
         }
       );
-      // console.log(data);
       return data;
     },
     {
       onSuccess: (data) => {
-        // Invalidate the 'user' query to refetch updated data
-        queryClient.invalidateQueries("user");
-        console.log("Photo updated:", data.photo);
+        console.log("Photo updated:", data.data.photo);
+        // Update local cache
+        queryClient.setQueryData(["user", data.data.userId], (oldData) => ({
+          ...oldData,
+          photo: data.data.photo,
+        }));
+        queryClient.invalidateQueries(["user", data.data.userId]); // Refetch data
       },
       onError: (error) => {
         console.error("Error updating photo:", error.message);

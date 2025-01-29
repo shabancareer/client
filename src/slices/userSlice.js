@@ -24,6 +24,10 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       // console.log("Action:=", action.payload.token);
     },
+    updatePhoto: (state, action) => {
+      // console.log(action.payload);
+      state.user.photo = action.payload; // Only update photo
+    },
     logout: (state) => {
       state.user = null;
       state.token = null;
@@ -32,5 +36,5 @@ const authSlice = createSlice({
     },
   },
 });
-export const { loginSuccess, logout, setMood } = authSlice.actions;
+export const { loginSuccess, logout, setMood, updatePhoto } = authSlice.actions;
 export default authSlice.reducer;

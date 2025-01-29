@@ -5,7 +5,7 @@ import UserProfileSetting from "./userProfileSetting";
 
 const ChatDashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
-
+  const [photoUpdated, setPhotoUpdated] = useState(false); // Track photo update
   const handleShowProfile = (user) => {
     setSelectedUser(user); // Set the selected user data when clicked
     // console.log(user);
@@ -15,10 +15,13 @@ const ChatDashboard = () => {
       <div className="flex flex-row">
         <UserProfile onShowProfile={handleShowProfile} />
 
-        {selectedUser ? (
-          <UserProfileSetting user={selectedUser} />
-        ) : (
+        {photoUpdated || !selectedUser ? (
           <UserLeftChat />
+        ) : (
+          <UserProfileSetting
+            user={selectedUser}
+            onPhotoUpdate={() => setPhotoUpdated(true)} // Callback to update UI
+          />
         )}
         {/* <UserProfileSetting /> */}
       </div>
