@@ -2,6 +2,7 @@ import { useState } from "react";
 import UserProfile from "./userProfile";
 import UserLeftChat from "./userleftchat";
 import UserProfileSetting from "./userProfileSetting";
+import Chatbox from "./Chatbox";
 
 const ChatDashboard = () => {
   const [selectedUser, setSelectedUser] = useState(null);
@@ -23,6 +24,9 @@ const ChatDashboard = () => {
             onPhotoUpdate={() => setPhotoUpdated(true)} // Callback to update UI
           />
         )}
+        <div className="flex-1 bg-slate-500">
+          <Chatbox />
+        </div>
         {/* <UserProfileSetting /> */}
       </div>
     </>

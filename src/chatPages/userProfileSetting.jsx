@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Separator } from "@/components/ui/separator";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";

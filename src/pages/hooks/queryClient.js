@@ -49,4 +49,16 @@ const useUpdateUserPhoto = () => {
   );
 };
 
-export default useUpdateUserPhoto;
+const userLogout = async ({ email }) => {
+  const response = await axios.post(
+    "http://localhost:3000/api/logout",
+    {
+      email,
+    },
+    { withCredentials: true }
+  );
+  console.log(response.data);
+  return response.data; // Assumes the API returns the token and user info
+};
+
+export default { useUpdateUserPhoto, userLogout };

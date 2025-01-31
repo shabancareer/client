@@ -15,7 +15,7 @@ import UserAuth from "./pages/UserAuth.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import ChatDashboard from "./chatPages/chatDashbord.jsx";
 import isTokenExpired from "./Api/accessToken.js";
-import { loginSuccess, logout } from "./slices/userSlice.js";
+import { loginSuccess, logoutSuccess } from "./slices/userSlice.js";
 
 function App() {
   // const isAuth = Boolean(useSelector((state) => state.token));
@@ -61,7 +61,7 @@ function App() {
       console.log(
         "Token is already expired. User will be logged out immediately."
       );
-      dispatch(logout());
+      dispatch(logoutSuccess());
     }
 
     // if (remainingTime <= 0) {

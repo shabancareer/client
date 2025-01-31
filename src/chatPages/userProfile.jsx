@@ -1,12 +1,27 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import { useMutation } from "react-query";
+import { logoutSuccess } from "../slices/userSlice.js";
+import apiFunctions from "../pages/hooks/queryClient.js";
+const { userLogout } = apiFunctions;
 const UserProfile = ({ onShowProfile }) => {
+  const dispatch = useDispatch();
   const loginUser = useSelector((state) => state.user);
-  // console.log(loginUser);
-  // const [userProfile, setuserProfile] = useState(loginUser);
   const [hovered, setHovered] = useState(false);
-  // console.log(loginUser);
+  // console.log(loginUser.email);
+  const logout = useMutation({
+    mutationFn: async (email) => {
+      return await userLogout({ email });
+    },
+    onSuccess: () => {
+      localStorage.removeItem("authToken");
+      dispatch(logoutSuccess());
+    },
+    onError: (error) => {
+      console.error("Logout failed:", error);
+    },
+  });
   return (
     <>
       <div className="flex flex-col relative pb-5 items-center justify-end h-screen border-r-2 border-white bg-yellow-300">
@@ -30,7 +45,10 @@ const UserProfile = ({ onShowProfile }) => {
             </div>
           )}
         </div>
-        {/* <button type="button">Profile</button> */}
+        <LogoutOutlinedIcon
+          className="mt-3 rounded-full border-2 hover:border-gray-300 hover:bg-gray-100 cursor-pointer transition-all"
+          onClick={() => logout.mutate(loginUser.email)}
+        />
       </div>
     </>
   );
