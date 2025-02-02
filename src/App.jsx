@@ -47,7 +47,7 @@ function App() {
         );
       } catch (error) {
         console.error("Failed to refresh token. Logging out.", error);
-        dispatch(logout());
+        dispatch(logoutSuccess());
       }
     };
     const remainingTime = isTokenExpired(isAuth);

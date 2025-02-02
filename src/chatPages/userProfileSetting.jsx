@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Separator } from "@/components/ui/separator";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
-import useUpdateUserPhoto from "../pages/hooks/queryClient.js";
+import { useUpdateUserPhoto } from "../pages/hooks/queryClient.js";
 import { updatePhoto } from "../slices/userSlice.js";
 // const loginUser = useSelector((state) => state.user);
 
@@ -20,6 +20,7 @@ const UserProfileSetting = ({ user, onPhotoUpdate }) => {
   const photo = useSelector((state) => state.user.photo);
 
   const handlePhotoChange = async (event) => {
+    // console.log("button clicked", handlePhotoChange);
     const file = event.target.files[0];
     if (file) {
       updateUserPhoto.mutate(

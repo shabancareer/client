@@ -11,7 +11,7 @@ export const queryClient = new QueryClient({
   },
 });
 // Custom hook for updating user photo
-const useUpdateUserPhoto = () => {
+export const useUpdateUserPhoto = () => {
   const queryClient = useQueryClient();
   return useMutation(
     async ({ userId, file }) => {
@@ -49,16 +49,24 @@ const useUpdateUserPhoto = () => {
   );
 };
 
-const userLogout = async ({ email }) => {
+export const userLogout = async ({ email }) => {
+  const token = localStorage.getItem("accessToken"); // Retrieve stored token
+  // console.log(token);
   const response = await axios.post(
     "http://localhost:3000/api/logout",
     {
       email,
     },
-    { withCredentials: true }
+    {
+      withCredentials: true,
+      headers: {
+        // "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`, // Add the token here
+      },
+    }
   );
-  console.log(response.data);
+  console.log("Reponse Data:=", response.data);
   return response.data; // Assumes the API returns the token and user info
 };
 
-export default { useUpdateUserPhoto, userLogout };
+// export default { useUpdateUserPhoto, userLogout };

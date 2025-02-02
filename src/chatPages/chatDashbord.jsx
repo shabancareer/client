@@ -9,13 +9,13 @@ const ChatDashboard = () => {
   const [photoUpdated, setPhotoUpdated] = useState(false); // Track photo update
   const handleShowProfile = (user) => {
     setSelectedUser(user); // Set the selected user data when clicked
-    // console.log(user);
+    setPhotoUpdated(false); // Reset state when opening profile again
+    console.log(user);
   };
   return (
     <>
       <div className="flex flex-row">
         <UserProfile onShowProfile={handleShowProfile} />
-
         {photoUpdated || !selectedUser ? (
           <UserLeftChat />
         ) : (

@@ -3,19 +3,20 @@ import { useSelector, useDispatch } from "react-redux";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useMutation } from "react-query";
 import { logoutSuccess } from "../slices/userSlice.js";
-import apiFunctions from "../pages/hooks/queryClient.js";
-const { userLogout } = apiFunctions;
+import { userLogout } from "../pages/hooks/queryClient.js";
+// const userLogout = apiFunctions;
 const UserProfile = ({ onShowProfile }) => {
   const dispatch = useDispatch();
   const loginUser = useSelector((state) => state.user);
   const [hovered, setHovered] = useState(false);
   // console.log(loginUser.email);
+
   const logout = useMutation({
     mutationFn: async (email) => {
       return await userLogout({ email });
     },
     onSuccess: () => {
-      localStorage.removeItem("authToken");
+      localStorage.removeItem("accessToken");
       dispatch(logoutSuccess());
     },
     onError: (error) => {
