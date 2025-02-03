@@ -48,7 +48,6 @@ export const useUpdateUserPhoto = () => {
     }
   );
 };
-
 export const userLogout = async ({ email }) => {
   const token = localStorage.getItem("accessToken"); // Retrieve stored token
   // console.log(token);
@@ -69,4 +68,21 @@ export const userLogout = async ({ email }) => {
   return response.data; // Assumes the API returns the token and user info
 };
 
+export const userProfiles = async ({ email }) => {
+  // console.log("All users");
+  const allUsers = await axios.get(
+    "http://localhost:3000/api/allusers",
+    {
+      email,
+    },
+    {
+      withCredentials: true,
+      headers: {
+        // "Content-Type": "multipart/form-data",
+        // Authorization: `Bearer ${token}`, // Add the token here
+      },
+    }
+  );
+  console.log("Users Data:=", allUsers);
+};
 // export default { useUpdateUserPhoto, userLogout };

@@ -27,7 +27,9 @@ const UserProfile = ({ onShowProfile }) => {
     <>
       <div className="flex flex-col relative pb-5 items-center justify-end h-screen border-r-2 border-white bg-yellow-300">
         <div className="absolute top-5">
-          <h2>Shaban Ali</h2>
+          <h2>
+            {loginUser.name?.charAt(0).toUpperCase() + loginUser.name?.slice(1)}
+          </h2>
         </div>
         <div className="relative space-y-4 pl-3">
           <img
