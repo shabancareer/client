@@ -64,25 +64,31 @@ export const userLogout = async ({ email }) => {
       },
     }
   );
-  console.log("Reponse Data:=", response.data);
+  // console.log("Reponse Data:=", response.data);
   return response.data; // Assumes the API returns the token and user info
 };
 
-export const userProfiles = async ({ email }) => {
-  // console.log("All users");
-  const allUsers = await axios.get(
-    "http://localhost:3000/api/allusers",
-    {
-      email,
-    },
-    {
+export const userProfiles = async ({ searchTerm }) => {
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    const response = await axios.get("http://localhost:3000/api/allusers", {
+      params: { search: searchTerm }, // Ensure the query parameter is correct
       withCredentials: true,
       headers: {
-        // "Content-Type": "multipart/form-data",
-        // Authorization: `Bearer ${token}`, // Add the token here
+        Authorization: `Bearer ${token}`,
       },
-    }
-  );
-  console.log("Users Data:=", allUsers);
+    });
+
+    // console.log("Fetched Users:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "API Error:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
 };
+
 // export default { useUpdateUserPhoto, userLogout };
