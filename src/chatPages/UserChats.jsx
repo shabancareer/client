@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { Skeleton } from "@/components/ui/skeleton";
+import ScrollableFeed from "react-scrollable-feed";
 import { userProfiles } from "../pages/hooks/queryClient";
 import { useQueries, useQuery } from "react-query";
 // import debounce from "lodash.debounce";
@@ -28,9 +30,13 @@ const UserChats = () => {
     error,
   } = useQuery({
     queryKey: ["users", debouncedSearch],
-    queryFn: () => userProfiles({ email: debouncedSearch }),
+    // queryFn: () => userProfiles({ email: debouncedSearch }),
+    queryFn: () => userProfiles({ searchTerm: debouncedSearch }), // ✅ Correct parameter name
     enabled: !!debouncedSearch, // Prevent API call when input is empty
   });
+  // console.log(search);
+  // console.log("Loading state:", isLoading);
+
   return (
     <div className=" h-screen border-gray-400 rounded w-1/4 flex flex-col">
       <div className="bg-white 0 text-lg font-bold">
@@ -48,11 +54,42 @@ const UserChats = () => {
           <SearchOutlinedIcon className="relative bottom-8 left-1 rotate-90" />
         </div>
         {/* <h1>{search}</h1> */}
-        <div className="mt-4">
-          {isLoading && <p>Loading...</p>}
-          {isError && <p className="text-red-500">Error: {error.message}</p>}
-          {users && users.map((user) => <h1 key={user.id}>{user.name}</h1>)}
+        <div className="mt-4 h-ful max-h-96">
+          {isLoading && (
+            // <div className="bg-gray-200 h-6 w-full animate-pulse">
+            //   Loading...
+            // </div>
+            <div key="loading">
+              <Skeleton className="bg-gray-200 h-6 w-full animate-pulse" />
+              <Skeleton className="bg-gray-200 h-6 w-full animate-pulse mt-1" />
+              <Skeleton className="bg-gray-200 h-6 w-full animate-pulse mt-1" />
+              {/* <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-6 w-1/2" /> */}
+            </div>
+          )}
+          {isError && (
+            <p className="text-red-500 p-12">No User found with that query</p>
+          )}
+          <ScrollableFeed className="custom-scrollbar">
+            {users &&
+              users.map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-start p-1 mb-1 border-b bg-white hover:bg-slate-200 cursor-pointer"
+                >
+                  <img
+                    src={user.photo}
+                    alt={user.name}
+                    className="w-16 h-16 rounded-full object-cover"
+                  />
+                  <p className="text-gray-700 font-extrabold text-xl mx-11">
+                    {user.name}
+                  </p>
+                </div>
+              ))}
+          </ScrollableFeed>
         </div>
+
         {/* <h1>Shaban</h1>
         <h1>Shaban</h1>
         <h1>Shaban</h1> */}

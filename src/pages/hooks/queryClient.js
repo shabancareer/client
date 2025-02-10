@@ -70,7 +70,12 @@ export const userLogout = async ({ email }) => {
 
 export const userProfiles = async ({ searchTerm }) => {
   const token = localStorage.getItem("accessToken");
-
+  // Debugging: Check if searchTerm is undefined or empty
+  // if (!searchTerm || typeof searchTerm !== "string") {
+  //   console.error("❌ Search term is invalid:", searchTerm);
+  //   return [];
+  // }
+  if (!searchTerm) return []; // Prevent unnecessary API calls
   try {
     const response = await axios.get("http://localhost:3000/api/allusers", {
       params: { search: searchTerm }, // Ensure the query parameter is correct
@@ -79,9 +84,14 @@ export const userProfiles = async ({ searchTerm }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     // console.log("Fetched Users:", response.data);
-    return response.data;
+    // Filter users on the frontend as an extra check
+    const filteredUsers = response.data.filter(
+      (user) => user?.name?.toLowerCase().startsWith(searchTerm.toLowerCase()) // Optional chaining (?.) prevents errors
+    );
+    // console.log("filteredUsers=", filteredUsers);
+    return filteredUsers;
+    // return response.data;
   } catch (error) {
     console.error(
       "API Error:",

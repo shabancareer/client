@@ -197,3 +197,45 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Scrollbar for ScrollableFeed */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Thin scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Light gray track */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #bebfc2; /* Blue scrollbar */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #767777; /* Darker blue on hover */
+}
+
+/* Scrollbar Arrows - Show Only One at Top & Bottom */
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: block;
+  height: 10px; /* Adjust height */
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+/* Top arrow */
+.custom-scrollbar::-webkit-scrollbar-button:single-button:decrement {
+  background: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='gray'><path d='M12 8l-6 6h12z'/></svg>");
+}
+
+/* Bottom arrow */
+.custom-scrollbar::-webkit-scrollbar-button:single-button:increment {
+  background: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='gray'><path d='M12 16l6-6H6z'/></svg>");
+}
+
+/* Hide extra scrollbar buttons that appear unnecessarily */
+.custom-scrollbar::-webkit-scrollbar-button:double-button {
+  display: none;
+}
