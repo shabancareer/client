@@ -16,7 +16,7 @@ const UserProfile = ({ onShowProfile }) => {
       return await userLogout({ email });
     },
     onSuccess: () => {
-      localStorage.removeItem("accessToken");
+      // localStorage.removeItem("accessToken");
       dispatch(logoutSuccess());
     },
     onError: (error) => {

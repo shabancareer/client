@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
+// import { response } from "express";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -101,4 +102,40 @@ export const userProfiles = async ({ searchTerm }) => {
   }
 };
 
+export const accessChat = async ({ authUser, receiverId }) => {
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) {
+    console.error("Error: No access token found.");
+    throw new Error("No access token found.");
+  }
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3000/api/chats",
+      // { authUser, receiverId },
+      {
+        senderId: authUser.id, // ✅ Ensure sender ID is sent
+        receiverId: receiverId.id, // ✅ Ensure receiver ID is sent
+        content: "Hello!",
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("Chat created successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error("Server Error:", error.response.data);
+    } else {
+      console.error("Request Error:", error.message);
+    }
+    throw error; // Re-throw to handle in UI
+  }
+};
 // export default { useUpdateUserPhoto, userLogout };

@@ -53,7 +53,7 @@ function App() {
     const remainingTime = isTokenExpired(isAuth);
     // console.log(remainingTime);
     if (remainingTime > 0) {
-      // console.log(`Token will expire in ${remainingTime / 1000} seconds`);
+      console.log(`Token will expire in ${remainingTime / 1000} seconds`);
       setTimeout(() => {
         handleTokenRefresh();
       }, remainingTime);

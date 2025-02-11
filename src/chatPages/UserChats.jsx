@@ -4,16 +4,19 @@ import { Input } from "@/components/ui/input";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Skeleton } from "@/components/ui/skeleton";
 import ScrollableFeed from "react-scrollable-feed";
-import { userProfiles } from "../pages/hooks/queryClient";
-import { useQueries, useQuery } from "react-query";
+import { accessChat, userProfiles } from "../pages/hooks/queryClient";
+import { useMutation, useQuery } from "react-query";
+import { useSelector } from "react-redux";
 // import debounce from "lodash.debounce";
-import debounce from "debounce";
+// import debounce from "debounce";
 
 // const UsersList = () => {};
 
-const UserChats = () => {
+const UserChats = ({ onSelectChat }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const authUser = useSelector((state) => state.user);
+
   // Debounce user input to prevent excessive API calls
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -27,16 +30,27 @@ const UserChats = () => {
     data: users,
     isLoading,
     isError,
-    error,
+    // error,
   } = useQuery({
     queryKey: ["users", debouncedSearch],
     // queryFn: () => userProfiles({ email: debouncedSearch }),
     queryFn: () => userProfiles({ searchTerm: debouncedSearch }), // ✅ Correct parameter name
     enabled: !!debouncedSearch, // Prevent API call when input is empty
   });
-  // console.log(search);
-  // console.log("Loading state:", isLoading);
 
+  const handleChat = useMutation({
+    mutationFn: (receiverId) => accessChat({ receiverId, authUser }),
+    onSuccess: (data, user) => {
+      onSelectChat(user, data.chat); // ✅ Pass user and chat to ChatDashboard
+    },
+    onError: (error) => {
+      console.error("Error creating chat:", error);
+    },
+  });
+  // const handleChat = (user) => {
+  //   console.log("Selected User:", user);
+  //   // Dispatch action or navigate to chat screen
+  // };
   return (
     <div className=" h-screen border-gray-400 rounded w-1/4 flex flex-col">
       <div className="bg-white 0 text-lg font-bold">
@@ -76,6 +90,7 @@ const UserChats = () => {
                 <div
                   key={user.id}
                   className="flex items-start p-1 mb-1 border-b bg-white hover:bg-slate-200 cursor-pointer"
+                  onClick={() => handleChat.mutate(user)}
                 >
                   <img
                     src={user.photo}
@@ -85,6 +100,7 @@ const UserChats = () => {
                   <p className="text-gray-700 font-extrabold text-xl mx-11">
                     {user.name}
                   </p>
+                  {/* <button onClick={() => handleChat(user)}></button> */}
                 </div>
               ))}
           </ScrollableFeed>
