@@ -16,6 +16,8 @@ const ChatDashboard = () => {
   };
   // Function to handle chat selection
   const handleSelectChat = (user, chat = null) => {
+    // console.log("selectedUser", user);
+    // console.log("selectedChat", chat);
     setSelectedUser(user);
     setSelectedChat(chat); // If chat exists, set it
   };
@@ -31,10 +33,14 @@ const ChatDashboard = () => {
             onPhotoUpdate={() => setPhotoUpdated(true)} // Callback to update UI
           />
         )}
-        <div className="flex-1 bg-slate-500">
-          <ChatBox user={selectedUser} chat={selectedChat} />
-        </div>
         {/* <UserProfileSetting /> */}
+        <div className="flex-1 bg-slate-500">
+          <ChatBox user={selectedUser} />
+          {/* <p>chat={selectedChat}</p> */}
+          {/* {console.log("selectedChat", selectedChat.content)} */}
+          {/* {selectedChat.content} */}
+          <div>{/* <p>selectedChat</p> */}</div>
+        </div>
       </div>
     </>
   );

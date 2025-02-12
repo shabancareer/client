@@ -21,8 +21,9 @@ function App() {
   // const isAuth = Boolean(useSelector((state) => state.token));
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-  const isAuth = useSelector((state) => state.token);
+  const isAuth = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
+  console.log("isAuth", isAuth);
   useEffect(() => {
     if (!isAuth) return;
     const handleTokenRefresh = async () => {

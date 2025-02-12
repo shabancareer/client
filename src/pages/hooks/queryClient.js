@@ -1,7 +1,11 @@
 import { QueryClient } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
+import { addChat } from "../../slices/chatSlice";
+
+// import { useDispatch } from "react-redux";
 // import { response } from "express";
+// const dispatch = useDispatch();
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,7 +72,6 @@ export const userLogout = async ({ email }) => {
   // console.log("Reponse Data:=", response.data);
   return response.data; // Assumes the API returns the token and user info
 };
-
 export const userProfiles = async ({ searchTerm }) => {
   const token = localStorage.getItem("accessToken");
   // Debugging: Check if searchTerm is undefined or empty
@@ -101,7 +104,6 @@ export const userProfiles = async ({ searchTerm }) => {
     throw error;
   }
 };
-
 export const accessChat = async ({ authUser, receiverId }) => {
   const token = localStorage.getItem("accessToken");
 
@@ -136,6 +138,35 @@ export const accessChat = async ({ authUser, receiverId }) => {
       console.error("Request Error:", error.message);
     }
     throw error; // Re-throw to handle in UI
+  }
+};
+export const fetchUserChats = async ({ user, dispatch }) => {
+  if (!user || !user.id) {
+    console.error("User object is missing or invalid:", user);
+    return;
+  }
+  const token = localStorage.getItem("accessToken");
+  // console.log("Fetching chats for user ID:", user.id);
+  try {
+    const response = await axios.get("http://localhost:3000/api/allChats", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      withCredentials: true,
+    });
+    // console.log(response.data.chats);
+    dispatch(addChat(response.data.chats));
+    console.log("Dispatching chats:", response.data.chats);
+    // if (response.data.success) {
+    //   // setChats(response.data.chats); // Update state with fetched chats
+    // }
+  } catch (error) {
+    console.error("Error fetching user chats:", error);
+    // toast({
+    //   title: "Error!",
+    //   description: "Failed to load chats.",
+    //   variant: "destructive",
+    // });
   }
 };
 // export default { useUpdateUserPhoto, userLogout };

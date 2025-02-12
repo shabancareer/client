@@ -7,7 +7,7 @@ import { userLogout } from "../pages/hooks/queryClient.js";
 // const userLogout = apiFunctions;
 const UserProfile = ({ onShowProfile }) => {
   const dispatch = useDispatch();
-  const loginUser = useSelector((state) => state.user);
+  const loginUser = useSelector((state) => state.auth.user);
   const [hovered, setHovered] = useState(false);
   // console.log(loginUser.email);
 

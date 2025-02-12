@@ -9,14 +9,17 @@ import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 // import debounce from "lodash.debounce";
 // import debounce from "debounce";
-
 // const UsersList = () => {};
 
 const UserChats = ({ onSelectChat }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const authUser = useSelector((state) => state.user);
-
+  const authUser = useSelector((state) => state.auth.user);
+  const chats = useSelector((state) => state.chat.chats);
+  // console.log(chats);
+  useEffect(() => {
+    console.log("Chats in Redux:", chats);
+  }, [chats]);
   // Debounce user input to prevent excessive API calls
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -34,14 +37,16 @@ const UserChats = ({ onSelectChat }) => {
   } = useQuery({
     queryKey: ["users", debouncedSearch],
     // queryFn: () => userProfiles({ email: debouncedSearch }),
-    queryFn: () => userProfiles({ searchTerm: debouncedSearch }), // ✅ Correct parameter name
+    queryFn: () => userProfiles({ searchTerm: debouncedSearch }),
     enabled: !!debouncedSearch, // Prevent API call when input is empty
   });
 
   const handleChat = useMutation({
     mutationFn: (receiverId) => accessChat({ receiverId, authUser }),
     onSuccess: (data, user) => {
-      onSelectChat(user, data.chat); // ✅ Pass user and chat to ChatDashboard
+      // console.log("Data=", data.newChat);
+      // console.log("Users=", user);
+      onSelectChat(user, data.newChat);
     },
     onError: (error) => {
       console.error("Error creating chat:", error);
@@ -85,7 +90,8 @@ const UserChats = ({ onSelectChat }) => {
             <p className="text-red-500 p-12">No User found with that query</p>
           )}
           <ScrollableFeed className="custom-scrollbar">
-            {users &&
+            {debouncedSearch ? (
+              users &&
               users.map((user) => (
                 <div
                   key={user.id}
@@ -100,15 +106,65 @@ const UserChats = ({ onSelectChat }) => {
                   <p className="text-gray-700 font-extrabold text-xl mx-11">
                     {user.name}
                   </p>
-                  {/* <button onClick={() => handleChat(user)}></button> */}
                 </div>
-              ))}
+              ))
+            ) : chats.length === 0 ? (
+              <p className="text-red-500">No chats available</p>
+            ) : (
+              <ul className="space-y-3">
+                {chats.map((chat) => (
+                  <li
+                    key={chat.id}
+                    className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={chat.receiver?.photo || "default-avatar.png"}
+                        alt="User Avatar"
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div>
+                        <h4 className="font-medium text-gray-900">
+                          {chat.receiver?.name || "Unknown User"}
+                        </h4>
+                        <p className="text-gray-600 text-sm">{chat.message}</p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </ScrollableFeed>
         </div>
 
-        {/* <h1>Shaban</h1>
-        <h1>Shaban</h1>
-        <h1>Shaban</h1> */}
+        {/* <div className="w-full max-w-2xl mx-auto p-4 bg-gray-100 rounded-lg shadow-md">
+          {chats.length === 0 ? (
+            <p className="text-red-500">No chats available</p>
+          ) : (
+            <ul className="space-y-3">
+              {chats.map((chat) => (
+                <li
+                  key={chat.id}
+                  className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
+                >
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={chat.receiver?.photo || "default-avatar.png"} // Display user's avatar
+                      alt="User Avatar"
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <div>
+                      <h4 className="font-medium text-gray-900">
+                        {chat.receiver?.name || "Unknown User"}
+                      </h4>
+                      <p className="text-gray-600 text-sm">{chat.message}</p>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div> */}
       </div>
     </div>
   );

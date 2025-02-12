@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import useGoogleLoginHandler from "./hooks/useGoogleLoginHandler";
 import { loginSuccess } from "../slices/userSlice";
+import { fetchUserChats } from "./hooks/queryClient";
 
 const loginUser = async ({ email, password }) => {
   const response = await axios.post(
@@ -85,12 +86,10 @@ const Login = () => {
         });
         return;
       }
-      dispatch(
-        loginSuccess({
-          token: backendResult.accessToken,
-          user: backendResult.data,
-        })
-      );
+      // Store token and user data
+      const token = backendResult.accessToken;
+      const user = backendResult.data;
+      dispatch(loginSuccess({ token, user }));
       // Store the access token in localStorage
       localStorage.setItem("accessToken", backendResult.accessToken);
       toast({
@@ -98,7 +97,10 @@ const Login = () => {
         description: `Hello, ${backendResult.data.name}. Login successful!`,
         variant: "success",
       });
-      //   navigate(<ChatDashboard />);
+      // Fetch user chats after login
+      // fetchUserChats(user, dispatch);
+      // console.log("User after login:", user);
+      fetchUserChats({ user, dispatch });
     },
     onError: () => {
       toast({

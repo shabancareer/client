@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { toast } from "../../components/ui/use-toast";
 import { loginSuccess } from "../../slices/userSlice";
+import { fetchUserChats } from "./queryClient";
 
 const useGoogleLoginHandler = () => {
   // const queryClient = useQueryClient();
@@ -32,13 +33,11 @@ const useGoogleLoginHandler = () => {
         });
         return;
       }
+      // Store token and user data
+      const token = backendResult.accessToken;
+      const user = backendResult.data;
       // console.log(backendResult);
-      dispatch(
-        loginSuccess({
-          token: backendResult.accessToken,
-          user: backendResult.data,
-        })
-      );
+      dispatch(loginSuccess({ token, user }));
       // Store the access token in localStorage
       localStorage.setItem("accessToken", backendResult.accessToken);
       toast({
@@ -46,6 +45,7 @@ const useGoogleLoginHandler = () => {
         description: `Hello, ${backendResult.data.name}. Login successful!`,
         variant: "success",
       });
+      fetchUserChats(user);
       //   navigate(<ChatDashboard />);
     },
     onError: (error) => {

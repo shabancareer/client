@@ -34,8 +34,12 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem("accessToken");
     },
+    // addChat: (state, action) => {
+    //   state.chats = action.payload; // This line should be fine
+    //   console.log(action);
+    // },
   },
 });
-export const { loginSuccess, logoutSuccess, setMood, updatePhoto } =
+export const { loginSuccess, logoutSuccess, setMood, updatePhoto, addChat } =
   authSlice.actions;
 export default authSlice.reducer;
