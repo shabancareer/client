@@ -17,8 +17,8 @@ const UserProfileSetting = ({ user, onPhotoUpdate }) => {
   const updateUserPhoto = useUpdateUserPhoto();
   // const [photo, setPhoto] = useState(user.photo);
   const dispatch = useDispatch();
-  const photo = useSelector((state) => state.user.photo);
-
+  const photo = useSelector((state) => state.auth.photo);
+  // console.log(photo);
   const handlePhotoChange = async (event) => {
     // console.log("button clicked", handlePhotoChange);
     const file = event.target.files[0];

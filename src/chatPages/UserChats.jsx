@@ -18,7 +18,7 @@ const UserChats = ({ onSelectChat }) => {
   const chats = useSelector((state) => state.chat.chats);
   // console.log(chats);
   useEffect(() => {
-    console.log("Chats in Redux:", chats);
+    // console.log("Chats in Redux:", chats);
   }, [chats]);
   // Debounce user input to prevent excessive API calls
   useEffect(() => {
@@ -115,7 +115,7 @@ const UserChats = ({ onSelectChat }) => {
                 {chats.map((chat) => (
                   <li
                     key={chat.id}
-                    className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
+                    className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:bg-slate-300 cursor-pointer"
                   >
                     <div className="flex items-center space-x-3">
                       <img

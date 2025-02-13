@@ -119,7 +119,7 @@ export const accessChat = async ({ authUser, receiverId }) => {
       {
         senderId: authUser.id, // ✅ Ensure sender ID is sent
         receiverId: receiverId.id, // ✅ Ensure receiver ID is sent
-        content: "Hello!",
+        content: "New message t",
       },
       {
         headers: {
