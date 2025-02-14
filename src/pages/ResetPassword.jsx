@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+// import { useMutation } from "@tanstack/react-query";
+import { useMutation } from "react-query";
 import axios from "axios";
 import { toast } from "../components/ui/use-toast";
 // import { response } from "express";

@@ -21,7 +21,7 @@ const loginUser = async ({ email, password }) => {
     },
     { withCredentials: true }
   );
-  // console.log(response.data);
+
   return response.data; // Assumes the API returns the token and user info
 };
 const Login = () => {
@@ -78,15 +78,6 @@ const Login = () => {
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser({ email, password }),
     onSuccess: (backendResult) => {
-      if (!backendResult.success) {
-        toast({
-          title: "Login Failed!..",
-          description: `${backendResult.error}` || "Invalid credentials",
-          variant: "destructive",
-        });
-        return;
-      }
-      // Store token and user data
       const token = backendResult.accessToken;
       const user = backendResult.data;
       dispatch(loginSuccess({ token, user }));
@@ -102,10 +93,16 @@ const Login = () => {
       // console.log("User after login:", user);
       fetchUserChats({ user, dispatch });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Login error:", error.response?.data || error.message);
+      let errorMessage = "Invalid credentials"; // Default error message
+
+      if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      }
       toast({
-        title: "Login Failed!..",
-        description: "Invalid credentials",
+        title: "Login Failed!",
+        description: errorMessage,
         variant: "destructive",
       });
     },
@@ -146,15 +143,15 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <div className="flex flex-row justify-end mt-7">
-            <button className="text-blue-600" onClick={handleOpenPopup}>
-              Forget Password?
-            </button>
-          </div>
-          <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 hover:cursor-pointer">
+          <div className="bg-blue-700 flex flex-row justify-evenly text-white py-2 mt-2 hover:cursor-pointer">
             <button type="submit">Sing-In</button>
           </div>
         </form>
+        <div className="flex flex-row justify-end mt-7">
+          <button className="text-blue-600" onClick={handleOpenPopup}>
+            Forget Password?
+          </button>
+        </div>
       </div>
       <div>
         <div className="flex flex-row pt-4">
