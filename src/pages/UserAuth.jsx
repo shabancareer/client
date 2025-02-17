@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // import { loginSuccess } from "../slices/userSlice";
 // import { Link } from "react-router";
-import SingUp from "./singUp";
+import SingUp from "./singup";
 import Login from "./login";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "../components/ui/use-toast";

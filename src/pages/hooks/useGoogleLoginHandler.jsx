@@ -4,12 +4,15 @@ import { useDispatch } from "react-redux";
 import { toast } from "../../components/ui/use-toast";
 import { loginSuccess } from "../../slices/userSlice";
 import { fetchUserChats } from "./queryClient";
+import { error } from "console";
 
 const useGoogleLoginHandler = () => {
   // const queryClient = useQueryClient();
   const dispatch = useDispatch();
+
   const loginWithBackend = useMutation({
     mutationFn: async (userInfo) => {
+      // console.log(userInfo);
       const response = await fetch("http://localhost:3000/api/googleLogin", {
         method: "POST",
         headers: {
@@ -18,40 +21,70 @@ const useGoogleLoginHandler = () => {
         body: JSON.stringify(userInfo),
         credentials: "include", // Ensures cookies are sent
       });
-      // console.log(userInfo);
-      if (!response.ok) {
-        throw new Error("Failed to log in with backend");
+
+      const errorData = await response.json();
+      // ✅ Check for 404 (User Not Found)
+      if (response.status === 404) {
+        throw new Error(errorData.error);
       }
-      return response.json();
+      // ✅ Check for 403 (email not verified)
+      if (response.status === 403) {
+        const errorData = await response.json();
+        throw new Error(errorData.error); // This will be caught in onError
+      }
+      // console.log(response);
+      if (!response.ok) {
+        throw new Error("Failed to logIn with backend");
+      }
+      // return;
+      // return response.json();
+      return errorData;
     },
     onSuccess: (backendResult) => {
-      if (!backendResult.success) {
+      // Handle email verification
+      if (!backendResult.data.emailVerified) {
         toast({
-          title: "Login Failed!..",
-          description: backendResult.error,
+          title: "Email Not Verified",
+          description: "Please verify your email before logging in.",
           variant: "destructive",
         });
         return;
       }
+
       // Store token and user data
       const token = backendResult.accessToken;
       const user = backendResult.data;
-      // console.log(backendResult);
+
       dispatch(loginSuccess({ token, user }));
-      // Store the access token in localStorage
       localStorage.setItem("accessToken", backendResult.accessToken);
+
       toast({
         title: "Welcome!",
         description: `Hello, ${backendResult.data.name}. Login successful!`,
         variant: "success",
       });
+
       fetchUserChats(user);
-      //   navigate(<ChatDashboard />);
     },
     onError: (error) => {
+      console.log(error.message);
+      // ✅ Show specific toast for "User Not Found" error
+      if (
+        error.message.includes(
+          "E-mail Cannot find user with these credentials. Please singUp first"
+        )
+      ) {
+        toast({
+          title: "User Not Found",
+          description: "Please sign up before logging in.",
+          variant: "destructive",
+        });
+        return;
+      }
+      // ✅ Handle generic login errors
       toast({
         title: "Login Error",
-        description: `"E-mail Cannot find user with these credentials. Please singUp first"${error.message}`,
+        description: error.message,
         variant: "destructive",
       });
     },
@@ -68,25 +101,26 @@ const useGoogleLoginHandler = () => {
             },
           }
         );
+        // console.log("handleLoginSuccess=", response);
         if (!response.ok) {
           throw new Error("Failed to fetch user info");
         }
         return response.json();
       };
-
       const { access_token } = tokenResponse;
+      // console.log(access_token);
       const userInfo = await fetchUserInfo(access_token);
-
-      const { email, email_verified, name, picture, sub } = userInfo;
-
-      if (!email_verified) {
-        toast({
-          title: "Email Not Verified",
-          description: "Please verify your email to log in.",
-          variant: "destructive",
-        });
-        return;
-      }
+      // console.log("User Info from Google:", userInfo);
+      const { email, name, picture, sub } = userInfo;
+      // console.log(email_verified);
+      // if (!email_verified) {
+      //   toast({
+      //     title: "Email Not Verified",
+      //     description: "Please verify your email before login.",
+      //     variant: "destructive",
+      //   });
+      //   return;
+      // }
 
       loginWithBackend.mutate({ email, name, picture, sub });
     } catch (error) {

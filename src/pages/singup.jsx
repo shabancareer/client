@@ -13,7 +13,9 @@ const SingUp = () => {
   const navigate = useNavigate();
   // Extract token from URL
   const queryParams = new URLSearchParams(window.location.search);
+  console.log(queryParams);
   const token = queryParams.get("token");
+  console.log("token singup=", token);
   if (token) {
     try {
       const decodedToken = jwtDecode(token);
@@ -83,21 +85,22 @@ const SingUp = () => {
   };
   return (
     <>
+      <div className="flex justify-center my-10">
+        <h3 className="text-gray-700">Sign Up with:</h3>
+        <a href="http://localhost:3000/auth/google" className="absolute p-3">
+          <img
+            src={googleImg}
+            className="w-6 h-6 m-5 mx-4 hover:cursor-pointer"
+            alt="Google SingUp button"
+          />
+        </a>
+      </div>
+
+      <p className="flex flex-row justify-center mb-2">Or:</p>
       <form
         className="flex flex-col space-y-4 w-5/12"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex justify-center my-10">
-          <h3 className="text-gray-700">Sign Up with:</h3>
-          <a href="http://localhost:3000/auth/google" className="absolute p-3">
-            <img
-              src={googleImg}
-              className="w-6 h-6 m-5 mx-4 hover:cursor-pointer"
-              alt="Google SingUp button"
-            />
-          </a>
-        </div>
-        <p className="flex flex-row justify-center">Or:</p>
         <input
           type="text"
           placeholder="Enter your Name"
@@ -128,6 +131,7 @@ const SingUp = () => {
           type="password"
           name="password"
           placeholder="Enter your Password"
+          autoComplete="current-password"
           className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           {...register("password", { required: "Password is required" })}
         />
