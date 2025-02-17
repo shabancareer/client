@@ -4,12 +4,11 @@ import { useDispatch } from "react-redux";
 import { toast } from "../../components/ui/use-toast";
 import { loginSuccess } from "../../slices/userSlice";
 import { fetchUserChats } from "./queryClient";
-import { error } from "console";
+// import { error } from "console";
 
 const useGoogleLoginHandler = () => {
   // const queryClient = useQueryClient();
   const dispatch = useDispatch();
-
   const loginWithBackend = useMutation({
     mutationFn: async (userInfo) => {
       // console.log(userInfo);
@@ -22,15 +21,14 @@ const useGoogleLoginHandler = () => {
         credentials: "include", // Ensures cookies are sent
       });
 
-      const errorData = await response.json();
+      const responseData = await response.json();
       // ✅ Check for 404 (User Not Found)
-      if (response.status === 404) {
-        throw new Error(errorData.error);
+      if (response.status === 403) {
+        throw new Error(responseData.error); // This will be caught in onError
       }
       // ✅ Check for 403 (email not verified)
-      if (response.status === 403) {
-        const errorData = await response.json();
-        throw new Error(errorData.error); // This will be caught in onError
+      if (response.status === 404) {
+        throw new Error(responseData.error); // Will be caught in onError
       }
       // console.log(response);
       if (!response.ok) {
@@ -38,9 +36,10 @@ const useGoogleLoginHandler = () => {
       }
       // return;
       // return response.json();
-      return errorData;
+      return responseData;
     },
     onSuccess: (backendResult) => {
+      console.log("backendResult=", backendResult);
       // Handle email verification
       if (!backendResult.data.emailVerified) {
         toast({
@@ -67,7 +66,7 @@ const useGoogleLoginHandler = () => {
       fetchUserChats(user);
     },
     onError: (error) => {
-      console.log(error.message);
+      console.log("error.message=", error);
       // ✅ Show specific toast for "User Not Found" error
       if (
         error.message.includes(
@@ -89,7 +88,6 @@ const useGoogleLoginHandler = () => {
       });
     },
   });
-
   const handleLoginSuccess = async (tokenResponse) => {
     try {
       const fetchUserInfo = async (accessToken) => {
@@ -132,7 +130,6 @@ const useGoogleLoginHandler = () => {
       });
     }
   };
-
   return handleLoginSuccess;
 };
 

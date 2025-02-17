@@ -51,11 +51,11 @@ const SingUp = () => {
       });
     },
     onSuccess: (data) => {
-      // console.log("User created:", data.data);
+      console.log("User created:", data.data);
       const userEmail = data.data.data.email;
       toast({
         title: "Signup Successful!",
-        description: `Your account has been created successfully.${userEmail}Please check your inbox to verify email`,
+        description: `Your account has been created successfully.Please verify your email ${userEmail}`,
         variant: "success",
       });
     },
@@ -63,9 +63,7 @@ const SingUp = () => {
       // console.error("Signup failed:", error.response?.data || error.message);
       toast({
         title: "Signup Failed",
-        description:
-          error.response?.data?.message ||
-          "An error occurred. Please try again",
+        description: error.response?.data?.message,
         variant: "destructive",
       });
     },
@@ -122,6 +120,7 @@ const SingUp = () => {
         <input
           type="email"
           name="email"
+          autoComplete="email"
           placeholder="Enter your Email"
           className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           {...register("email", { required: "Email is required" })}

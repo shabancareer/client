@@ -53,6 +53,18 @@ export const useUpdateUserPhoto = () => {
     }
   );
 };
+export const loginUser = async ({ email, password }) => {
+  const response = await axios.post(
+    "http://localhost:3000/api/login",
+    {
+      email,
+      password,
+    },
+    { withCredentials: true }
+  );
+
+  return response.data; // Assumes the API returns the token and user info
+};
 export const userLogout = async ({ email }) => {
   const token = localStorage.getItem("accessToken"); // Retrieve stored token
   // console.log(token);

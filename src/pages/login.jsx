@@ -7,23 +7,10 @@ import { Toaster } from "react-hot-toast";
 import { toast } from "../components/ui/use-toast";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import useGoogleLoginHandler from "./hooks/useGoogleLoginHandler";
 import { loginSuccess } from "../slices/userSlice";
-import { fetchUserChats } from "./hooks/queryClient";
+import { fetchUserChats, loginUser } from "./hooks/queryClient";
 
-const loginUser = async ({ email, password }) => {
-  const response = await axios.post(
-    "http://localhost:3000/api/login",
-    {
-      email,
-      password,
-    },
-    { withCredentials: true }
-  );
-
-  return response.data; // Assumes the API returns the token and user info
-};
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -94,15 +81,11 @@ const Login = () => {
       fetchUserChats({ user, dispatch });
     },
     onError: (error) => {
-      console.error("Login error:", error.response?.data || error.message);
-      let errorMessage = "Invalid credentials"; // Default error message
-
-      if (error.response?.data?.error) {
-        errorMessage = error.response.data.error;
-      }
+      const errorMessage = error.response?.data?.message;
+      console.log(errorMessage);
       toast({
         title: "Login Failed!",
-        description: errorMessage,
+        description: errorMessage, // ✅ Ensure it's a string
         variant: "destructive",
       });
     },
