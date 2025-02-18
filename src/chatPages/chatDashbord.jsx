@@ -16,8 +16,8 @@ const ChatDashboard = () => {
   };
   // Function to handle chat selection
   const handleSelectChat = (user, chat = null) => {
-    // console.log("selectedUser", user);
-    // console.log("selectedChat", chat);
+    console.log("selectedUser", user);
+    console.log("selectedChat", chat);
     setSelectedUser(user);
     setSelectedChat(chat); // If chat exists, set it
   };
@@ -34,7 +34,7 @@ const ChatDashboard = () => {
           />
         )}
         {/* <UserProfileSetting /> */}
-        <div className="flex-1 bg-slate-500">
+        <div className="flex-1">
           <ChatBox user={selectedUser} />
           {/* <p>chat={selectedChat}</p> */}
           {/* {console.log("selectedChat", selectedChat.content)} */}

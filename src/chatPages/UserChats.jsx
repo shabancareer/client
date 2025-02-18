@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Skeleton } from "@/components/ui/skeleton";
 import ScrollableFeed from "react-scrollable-feed";
-import { accessChat, userProfiles } from "../pages/hooks/queryClient";
+import { findChat, userProfiles } from "../pages/hooks/queryClient";
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 // import debounce from "lodash.debounce";
@@ -25,7 +25,6 @@ const UserChats = ({ onSelectChat }) => {
     const handler = setTimeout(() => {
       setDebouncedSearch(search);
     }, 300); // Adjust delay (300ms) as needed
-
     return () => clearTimeout(handler);
   }, [search]);
   // Fetch users based on search
@@ -41,12 +40,23 @@ const UserChats = ({ onSelectChat }) => {
     enabled: !!debouncedSearch, // Prevent API call when input is empty
   });
 
-  const handleChat = useMutation({
-    mutationFn: (receiverId) => accessChat({ receiverId, authUser }),
-    onSuccess: (data, user) => {
+  // const findChat = useMutation({
+  //   mutationFn: (receiverId) => accessChat({ receiverId, authUser }),
+  //   onSuccess: (data, user) => {
+  //     console.log("Data=", data.newChat);
+  //     console.log("Users=", user);
+  //     onSelectChat(user, data.newChat);
+  //   },
+  //   onError: (error) => {
+  //     console.error("Error creating chat:", error);
+  //   },
+  // });
+  const findChats = useMutation({
+    mutationFn: (receiverId) => findChat({ receiverId, authUser }),
+    onSuccess: (user) => {
       // console.log("Data=", data.newChat);
-      // console.log("Users=", user);
-      onSelectChat(user, data.newChat);
+      console.log("Users=", user);
+      // onSelectChat(user, data.newChat);
     },
     onError: (error) => {
       console.error("Error creating chat:", error);
@@ -57,7 +67,7 @@ const UserChats = ({ onSelectChat }) => {
   //   // Dispatch action or navigate to chat screen
   // };
   return (
-    <div className=" h-screen border-gray-400 rounded w-1/4 flex flex-col">
+    <div className=" h-screen rounded w-1/4 flex flex-col border-solid border-gray-400 border-r-2">
       <div className="bg-white 0 text-lg font-bold">
         <h1 className="mx-4 py-2">All Chats</h1>
       </div>
@@ -96,7 +106,7 @@ const UserChats = ({ onSelectChat }) => {
                 <div
                   key={user.id}
                   className="flex items-start p-1 mb-1 border-b bg-white hover:bg-slate-200 cursor-pointer"
-                  onClick={() => handleChat.mutate(user)}
+                  onClick={() => findChats.mutate(user)}
                 >
                   <img
                     src={user.photo}

@@ -5,7 +5,7 @@ const ChatBox = ({ user, chat }) => {
   // console.log("Chat Box chat=", chat);
   if (!user) {
     return (
-      <div className="text-center text-gray-500 p-4">
+      <div className="text-white p-4 bg-yellow-400">
         Select a user to start chat
       </div>
     );

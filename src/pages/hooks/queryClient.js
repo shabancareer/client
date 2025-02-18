@@ -116,7 +116,7 @@ export const userProfiles = async ({ searchTerm }) => {
     throw error;
   }
 };
-export const accessChat = async ({ authUser, receiverId }) => {
+export const createChat = async ({ authUser, receiverId }) => {
   const token = localStorage.getItem("accessToken");
 
   if (!token) {
@@ -152,6 +152,34 @@ export const accessChat = async ({ authUser, receiverId }) => {
     throw error; // Re-throw to handle in UI
   }
 };
+export const findChat = async ({ authUser, receiverId }) => {
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    const response = await axios.get("http://localhost:3000/api/allChats", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      params: {
+        senderId: authUser.id, // ✅ Correctly sending senderId
+        receiverId: receiverId.id, // ✅ Correctly sending receiverId
+        content: "New message t",
+      },
+    });
+
+    console.log("Chat Find successfully:", response);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error("Server Error:", error.response.data);
+    } else {
+      console.error("Request Error:", error.message);
+    }
+    throw error;
+  }
+};
+
 export const fetchUserChats = async ({ user, dispatch }) => {
   if (!user || !user.id) {
     console.error("User object is missing or invalid:", user);
