@@ -81,13 +81,41 @@ const Login = () => {
       fetchUserChats({ user, dispatch });
     },
     onError: (error) => {
-      const errorMessage = error.response?.data?.message;
-      console.log(errorMessage);
-      toast({
-        title: "Login Failed!",
-        description: errorMessage, // ✅ Ensure it's a string
-        variant: "destructive",
-      });
+      console.log("eRROR=", error.response?.status);
+      const errorMessage = error.response?.data?.error;
+      // toast({
+      //   title: "Login Failed!",
+      //   description: errorMessage, // ✅ Ensure it's a string
+      //   variant: "destructive",
+      // });
+      // Handle specific error cases
+      if (error.response?.status === 500) {
+        toast({
+          title: "User Not Found",
+          description: "please sign up first.",
+          variant: "destructive",
+        });
+      } else if (error.response?.status === 403) {
+        toast({
+          title: "Email Not Verified",
+          description: "Please verify your email before logging in.",
+          variant: "destructive",
+        });
+      } else if (error.response?.status === 401) {
+        toast({
+          title: "Invalid Credentials",
+          description: "Please check your email and password.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Login Failed",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      }
+
+      console.log(error);
     },
   });
   const handleSubmit = (e) => {

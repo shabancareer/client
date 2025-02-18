@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useMutation } from "react-query";
@@ -9,7 +9,24 @@ const UserProfile = ({ onShowProfile }) => {
   const dispatch = useDispatch();
   const loginUser = useSelector((state) => state.auth.user);
   const [hovered, setHovered] = useState(false);
-  // console.log(loginUser.email);
+  const [fontSize, setFontSize] = useState("text-sm"); // Default font size
+  const nameRef = useRef(null);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (nameRef.current) {
+        const { scrollWidth, clientWidth } = nameRef.current;
+        if (scrollWidth > clientWidth) {
+          setFontSize("text-[8px]"); // Reduce font size if overflowing
+        } else {
+          setFontSize("text-xl");
+        }
+      }
+    };
+    checkOverflow(); // Run on mount
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [loginUser?.name]);
 
   const logout = useMutation({
     mutationFn: async (email) => {
@@ -26,8 +43,8 @@ const UserProfile = ({ onShowProfile }) => {
   return (
     <>
       <div className="flex flex-col relative pb-5 items-center justify-end h-screen border-r-2 border-white bg-yellow-300">
-        <div className="absolute top-5">
-          <h2>
+        <div className="absolute top-5 max-w-[150px] overflow-hidden">
+          <h2 ref={nameRef} className={`font-bold truncate ${fontSize}`}>
             {loginUser.name?.charAt(0).toUpperCase() + loginUser.name?.slice(1)}
           </h2>
         </div>
