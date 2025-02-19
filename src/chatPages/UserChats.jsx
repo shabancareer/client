@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Skeleton } from "@/components/ui/skeleton";
 import ScrollableFeed from "react-scrollable-feed";
-import { fetchUserChats, userProfiles } from "../pages/hooks/queryClient";
+import {
+  fetchUserChats,
+  userProfiles,
+  getChatMessages,
+} from "../pages/hooks/queryClient";
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 // import debounce from "lodash.debounce";
@@ -51,21 +55,40 @@ const UserChats = ({ onSelectChat }) => {
   //     console.error("Error creating chat:", error);
   //   },
   // });
-  const findChats = useMutation({
-    mutationFn: (receiverId) => fetchUserChats({ receiverId, authUser }),
-    onSuccess: (user) => {
-      // console.log("Data=", data.newChat);
-      console.log("Users=", user);
-      // onSelectChat(user, data.newChat);
-    },
-    onError: (error) => {
-      console.error("Error creating chat:", error);
-    },
-  });
+  // const findMessages = useMutation({
+  //   mutationFn: ({ receiverId, authUser }) =>
+  //     userMessages({ receiverId, authUser }),
+  //   onSuccess: (user) => {
+  //     // console.log("Data=", data.newChat);
+  //     console.log("Users=", user);
+  //     // onSelectChat(user, data.newChat);
+  //   },
+  //   onError: (error) => {
+  //     console.error("Error creating chat:", error);
+  //   },
+  // });
   // const handleChat = (user) => {
   //   console.log("Selected User:", user);
   //   // Dispatch action or navigate to chat screen
   // };
+  const findMessages = useMutation({
+    mutationFn: async ({ receiverId, authUser }) => {
+      console.log("Calling API with:", { receiverId, authUser });
+
+      const response = await getChatMessages({ receiverId, authUser });
+
+      console.log("API Response:", response);
+
+      return response; // ✅ Return response
+    },
+    onSuccess: (user) => {
+      console.log("Users=", user);
+    },
+    onError: (error) => {
+      console.error("Error fetching messages:", error);
+    },
+  });
+
   return (
     <div className=" h-screen rounded w-1/4 flex flex-col border-solid border-gray-400 border-r-2">
       <div className="bg-white 0 text-lg font-bold">
@@ -106,7 +129,15 @@ const UserChats = ({ onSelectChat }) => {
                 <div
                   key={user.id}
                   className="flex items-start p-1 mb-1 border-b bg-white hover:bg-slate-200 cursor-pointer"
-                  onClick={() => findChats.mutate(user)}
+                  onClick={() => {
+                    console.log("User Clicked:", user.id);
+                    console.log("Auth User:", authUser);
+                    // console.log(receiverId);
+                    findMessages.mutate({
+                      receiverId: user.id,
+                      authUser: authUser.id,
+                    });
+                  }}
                 >
                   <img
                     src={user.photo}
@@ -119,7 +150,7 @@ const UserChats = ({ onSelectChat }) => {
                 </div>
               ))
             ) : chats.length === 0 ? (
-              <p className="text-red-500">No chats available</p>
+              <p className="text-red-500 ml-10">No chats available</p>
             ) : (
               <ul className="space-y-3">
                 {chats.map((chat) => (

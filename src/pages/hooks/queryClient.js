@@ -209,4 +209,29 @@ export const fetchUserChats = async ({ user, dispatch }) => {
     // });
   }
 };
+export const getChatMessages = async ({ receiverId, authUser }) => {
+  const token = localStorage.getItem("accessToken"); // Retrieve token
+
+  if (!token) {
+    console.error("No access token found!");
+    return; // Prevent request if token is missing
+  }
+
+  try {
+    const response = await axios.get("http://localhost:3000/api/messages", {
+      params: { receiverId, authUser }, // ✅ Ensure query parameters are included
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ Correctly formatted Authorization header
+      },
+      withCredentials: true, // ✅ Ensure credentials are sent if required
+    });
+
+    console.log("Raw API Response:", response);
+    return response.data; // ✅ Return response data
+  } catch (error) {
+    console.error("Error fetching user chats:", error.response?.data || error);
+    throw error;
+  }
+};
+
 // export default { useUpdateUserPhoto, userLogout };
