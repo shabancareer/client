@@ -64,6 +64,7 @@ const Login = () => {
   };
   const userLoginMutation = useMutation({
     mutationFn: () => loginUser({ email, password }),
+
     onSuccess: (backendResult) => {
       const token = backendResult.accessToken;
       const user = backendResult.data;
@@ -75,9 +76,7 @@ const Login = () => {
         description: `Hello, ${backendResult.data.name}. Login successful!`,
         variant: "success",
       });
-      // Fetch user chats after login
-      // fetchUserChats(user, dispatch);
-      // console.log("User after login:", user);
+
       fetchUserChats({ user, dispatch });
     },
     onError: (error) => {

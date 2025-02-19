@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useMutation } from "react-query";
 import { logoutSuccess } from "../slices/userSlice.js";
+import { resetChat } from "../slices/chatSlice.js";
 import { userLogout } from "../pages/hooks/queryClient.js";
 // const userLogout = apiFunctions;
 const UserProfile = ({ onShowProfile }) => {
@@ -35,6 +36,7 @@ const UserProfile = ({ onShowProfile }) => {
     onSuccess: () => {
       // localStorage.removeItem("accessToken");
       dispatch(logoutSuccess());
+      dispatch(resetChat());
     },
     onError: (error) => {
       console.error("Logout failed:", error);

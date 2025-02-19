@@ -5,8 +5,8 @@ const initialState = {
   user: null,
   // email: null,
   token: null,
-  chats: [],
-  selectChat: null,
+  // chats: [],
+  // selectChat: null,
   isAuthenticated: false,
 };
 const authSlice = createSlice({
@@ -31,6 +31,7 @@ const authSlice = createSlice({
     logoutSuccess: (state) => {
       state.user = null;
       state.token = null;
+      // state.chats = null;
       state.isAuthenticated = false;
       localStorage.removeItem("accessToken");
     },

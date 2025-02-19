@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Skeleton } from "@/components/ui/skeleton";
 import ScrollableFeed from "react-scrollable-feed";
-import { findChat, userProfiles } from "../pages/hooks/queryClient";
+import { fetchUserChats, userProfiles } from "../pages/hooks/queryClient";
 import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 // import debounce from "lodash.debounce";
@@ -52,7 +52,7 @@ const UserChats = ({ onSelectChat }) => {
   //   },
   // });
   const findChats = useMutation({
-    mutationFn: (receiverId) => findChat({ receiverId, authUser }),
+    mutationFn: (receiverId) => fetchUserChats({ receiverId, authUser }),
     onSuccess: (user) => {
       // console.log("Data=", data.newChat);
       console.log("Users=", user);
