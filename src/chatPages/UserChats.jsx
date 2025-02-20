@@ -5,7 +5,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Skeleton } from "@/components/ui/skeleton";
 import ScrollableFeed from "react-scrollable-feed";
 import {
-  fetchUserChats,
+  // fetchUserChats,
   userProfiles,
   getChatMessages,
 } from "../pages/hooks/queryClient";
@@ -73,16 +73,19 @@ const UserChats = ({ onSelectChat }) => {
   // };
   const findMessages = useMutation({
     mutationFn: async ({ receiverId, authUser }) => {
-      console.log("Calling API with:", { receiverId, authUser });
+      // console.log("Calling API with:", { receiverId, authUser });
 
       const response = await getChatMessages({ receiverId, authUser });
 
-      console.log("API Response:", response);
+      // console.log("API Response:", response);
 
       return response; // ✅ Return response
     },
     onSuccess: (user) => {
       console.log("Users=", user);
+      // console.log("Messages=", user.messages);
+
+      onSelectChat(user);
     },
     onError: (error) => {
       console.error("Error fetching messages:", error);
@@ -130,8 +133,8 @@ const UserChats = ({ onSelectChat }) => {
                   key={user.id}
                   className="flex items-start p-1 mb-1 border-b bg-white hover:bg-slate-200 cursor-pointer"
                   onClick={() => {
-                    console.log("User Clicked:", user.id);
-                    console.log("Auth User:", authUser);
+                    // console.log("User Clicked:", user.id);
+                    // console.log("Auth User:", authUser);
                     // console.log(receiverId);
                     findMessages.mutate({
                       receiverId: user.id,

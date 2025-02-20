@@ -13,9 +13,9 @@ import axios from "axios";
 import "./App.css";
 import UserAuth from "./pages/UserAuth.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
-import ChatDashboard from "./chatPages/chatDashbord.jsx";
 import isTokenExpired from "./Api/accessToken.js";
 import { loginSuccess, logoutSuccess } from "./slices/userSlice.js";
+import ChatDashboard from "./chatPages/chatDashbord.jsx";
 
 function App() {
   // const isAuth = Boolean(useSelector((state) => state.token));

@@ -226,7 +226,7 @@ export const getChatMessages = async ({ receiverId, authUser }) => {
       withCredentials: true, // ✅ Ensure credentials are sent if required
     });
 
-    console.log("Raw API Response:", response);
+    // console.log("Raw API Response:", response);
     return response.data; // ✅ Return response data
   } catch (error) {
     console.error("Error fetching user chats:", error.response?.data || error);

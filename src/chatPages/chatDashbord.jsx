@@ -15,11 +15,15 @@ const ChatDashboard = () => {
     // console.log(user);
   };
   // Function to handle chat selection
-  const handleSelectChat = (user, chat = null) => {
+  const handleSelectChat = (user) => {
+    const messageContents = user.messages.map((msg) => msg.content);
+    // console.log("messageContents=", messageContents);
+    const firstMessageContent = messageContents[0];
     console.log("selectedUser", user);
-    console.log("selectedChat", chat);
+    console.log("selectedChat", firstMessageContent);
+
     setSelectedUser(user);
-    setSelectedChat(chat); // If chat exists, set it
+    setSelectedChat(firstMessageContent); // If chat exists, set it
   };
   return (
     <>
