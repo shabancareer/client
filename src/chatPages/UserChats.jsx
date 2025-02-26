@@ -15,12 +15,12 @@ import { useSelector } from "react-redux";
 // import debounce from "debounce";
 // const UsersList = () => {};
 
-const UserChats = ({ onSelectChat }) => {
+const UserChats = ({ onSelectChat, userChat }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const authUser = useSelector((state) => state.auth.user);
   const chats = useSelector((state) => state.chat.chats);
-  // console.log(chats);
+
   useEffect(() => {
     // console.log("Chats in Redux:", chats);
   }, [chats]);
@@ -74,7 +74,6 @@ const UserChats = ({ onSelectChat }) => {
   const findMessages = useMutation({
     mutationFn: async ({ receiverId, authUser }) => {
       // console.log("Calling API with:", { receiverId, authUser });
-
       const response = await getChatMessages({ receiverId, authUser });
 
       // console.log("API Response:", response);
@@ -86,6 +85,7 @@ const UserChats = ({ onSelectChat }) => {
       // console.log("Messages=", user.messages);
 
       onSelectChat(user);
+      // userChat(user);
     },
     onError: (error) => {
       console.error("Error fetching messages:", error);
@@ -133,9 +133,6 @@ const UserChats = ({ onSelectChat }) => {
                   key={user.id}
                   className="flex items-start p-1 mb-1 border-b bg-white hover:bg-slate-200 cursor-pointer"
                   onClick={() => {
-                    // console.log("User Clicked:", user.id);
-                    // console.log("Auth User:", authUser);
-                    // console.log(receiverId);
                     findMessages.mutate({
                       receiverId: user.id,
                       authUser: authUser.id,
@@ -160,6 +157,7 @@ const UserChats = ({ onSelectChat }) => {
                   <li
                     key={chat.id}
                     className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:bg-slate-300 cursor-pointer"
+                    onClick={() => userChat(chat)}
                   >
                     <div className="flex items-center space-x-3">
                       <img

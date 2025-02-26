@@ -196,7 +196,7 @@ export const fetchUserChats = async ({ user, dispatch }) => {
     });
     // console.log(response.data.chats);
     dispatch(addChat(response.data.chats));
-    console.log("Dispatching chats:", response.data.chats);
+    // console.log("Dispatching chats:", response.data.chats);
     // if (response.data.success) {
     //   // setChats(response.data.chats); // Update state with fetched chats
     // }

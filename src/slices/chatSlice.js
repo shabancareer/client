@@ -10,9 +10,9 @@ const chatSlice = createSlice({
 
   reducers: {
     addChat: (state, action) => {
-      console.log("Previous state:", state.chats); // Log before update
+      // console.log("Previous state:", state.chats); // Log before update
       state.chats = action.payload; // Updating Redux state
-      console.log("Updated state:", state.chats); // Log after update
+      // console.log("Updated state:", state.chats); // Log after update
     },
     resetChat: () => initialState,
   },
