@@ -82,7 +82,7 @@ const UserChats = ({ onSelectChat }) => {
       return response; // ✅ Return response
     },
     onSuccess: (user) => {
-      console.log("Users=", user);
+      // console.log("Users=", user);
       // console.log("Messages=", user.messages);
 
       onSelectChat(user);

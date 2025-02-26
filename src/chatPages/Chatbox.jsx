@@ -1,8 +1,12 @@
 import React from "react";
 
-const ChatBox = ({ user, chat }) => {
-  // console.log("Chat Box user=", user);
-  // console.log("Chat Box chat=", chat);
+const ChatBox = ({ user }) => {
+  console.log(user?.messages[0]?.content);
+  const photo = user?.users.receiver.photo;
+  const name = user?.users.receiver.name;
+  const messages = user?.messages[0]?.content;
+  // console.log("Chat Box chat=", photo);
+  // console.log("Chat Box chat=", name);
   if (!user) {
     return (
       <div className="text-white p-4 bg-yellow-400">
@@ -12,20 +16,19 @@ const ChatBox = ({ user, chat }) => {
   }
 
   return (
-    <div className="p-4 bg-white rounded shadow-md">
-      <h2 className="text-xl font-bold">{user.name}</h2>
-      <img
-        src={user.photo}
-        alt={user.name}
-        className="w-16 h-16 rounded-full object-cover"
-      />
-      {/* {chat ? (
-        <p>Chat exists: {chat.id}</p>
-      ) : (
-        <p>No previous chat found, starting a new conversation.</p>
-      )} */}
-      <div>{/* <p>jhj</p> */}</div>
-    </div>
+    <>
+      <div className="p-4 bg-white rounded shadow-md">
+        <h2 className="text-xl font-bold">{name}</h2>
+        <img
+          src={photo}
+          alt={name}
+          className="w-16 h-16 rounded-full object-cover"
+        />
+      </div>
+      <div>
+        <p>{messages}</p>
+      </div>
+    </>
   );
 };
 

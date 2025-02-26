@@ -7,8 +7,10 @@ import UserChats from "./UserChats";
 const ChatDashboard = () => {
   // const userChats = useSelector((state) => state.chats);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [searchedUser, setSearchedUser] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
   const [photoUpdated, setPhotoUpdated] = useState(false); // Track photo update
+
   const handleShowProfile = (user) => {
     setSelectedUser(user); // Set the selected user data when clicked
     setPhotoUpdated(false); // Reset state when opening profile again
@@ -17,12 +19,10 @@ const ChatDashboard = () => {
   // Function to handle chat selection
   const handleSelectChat = (user) => {
     const messageContents = user.messages.map((msg) => msg.content);
-    // console.log("messageContents=", messageContents);
     const firstMessageContent = messageContents[0];
-    console.log("selectedUser", user);
-    console.log("selectedChat", firstMessageContent);
 
-    setSelectedUser(user);
+    // setSelectedUser(user);
+    setSearchedUser(user);
     setSelectedChat(firstMessageContent); // If chat exists, set it
   };
   return (
@@ -39,7 +39,7 @@ const ChatDashboard = () => {
         )}
         {/* <UserProfileSetting /> */}
         <div className="flex-1">
-          <ChatBox user={selectedUser} />
+          <ChatBox user={searchedUser} />
           {/* <p>chat={selectedChat}</p> */}
           {/* {console.log("selectedChat", selectedChat.content)} */}
           {/* {selectedChat.content} */}
