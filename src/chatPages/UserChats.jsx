@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 // import debounce from "debounce";
 // const UsersList = () => {};
 
-const UserChats = ({ onSelectChat, userChat }) => {
+const UserChats = ({ onSelectChat }) => {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const authUser = useSelector((state) => state.auth.user);
@@ -43,6 +43,11 @@ const UserChats = ({ onSelectChat, userChat }) => {
     queryFn: () => userProfiles({ searchTerm: debouncedSearch }),
     enabled: !!debouncedSearch, // Prevent API call when input is empty
   });
+
+  // const userChat = (c) => {
+  //   console.log(c);
+  //   return c;
+  // };
 
   // const findChat = useMutation({
   //   mutationFn: (receiverId) => accessChat({ receiverId, authUser }),
@@ -157,7 +162,7 @@ const UserChats = ({ onSelectChat, userChat }) => {
                   <li
                     key={chat.id}
                     className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:bg-slate-300 cursor-pointer"
-                    onClick={() => userChat(chat)}
+                    onClick={() => onSelectChat(chat)}
                   >
                     <div className="flex items-center space-x-3">
                       <img

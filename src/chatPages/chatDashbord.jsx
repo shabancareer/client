@@ -27,16 +27,16 @@ const ChatDashboard = () => {
     setSearchedUser(user);
     // setSelectedChat(firstMessageContent); // If chat exists, set it
   };
-  const userChat = (chat) => {
-    // console.log("Chat clicked:", chat); // Debugging
-    setCurrentChat(chat); // Update currentChat state
-  };
+  // const userChat = (chat) => {
+  //   // console.log("Chat clicked:", chat); // Debugging
+  //   setCurrentChat(chat); // Update currentChat state
+  // };
   return (
     <>
       <div className="flex flex-row">
         <UserProfile onShowProfile={handleShowProfile} />
         {photoUpdated || !selectedUser ? (
-          <UserChats onSelectChat={handleSelectChat} userChat={currentChat} />
+          <UserChats onSelectChat={handleSelectChat} />
         ) : (
           <UserProfileSetting
             user={selectedUser}
@@ -45,7 +45,7 @@ const ChatDashboard = () => {
         )}
         {/* <UserProfileSetting /> */}
         <div className="flex-1">
-          <ChatBox user={searchedUser} userChat={currentChat} />
+          <ChatBox user={searchedUser} />
           {/* <p>chat={selectedChat}</p> */}
           {/* {console.log("selectedChat", selectedChat.content)} */}
           {/* {selectedChat.content} */}
