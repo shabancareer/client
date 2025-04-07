@@ -1,7 +1,7 @@
 import React from "react";
 
 const ChatBox = ({ user }) => {
-  console.log(user);
+  console.log("Chatbox users:=", user);
 
   // const photo = user?.users?.receiver?.photo;
   // const name = user?.users?.receiver?.name;
@@ -15,9 +15,9 @@ const ChatBox = ({ user }) => {
     );
   }
   const isProcessedChat = user?.users && user?.messages;
-  const photo = isProcessedChat ? user.users.receiver?.photo : "";
-  const name = isProcessedChat ? user.users.receiver?.name : `User ${user.id}`;
-
+  const photo = user.receiver?.photo;
+  const name = user.receiver?.name;
+  console.log("Clicked user:=", name);
   return (
     <>
       <div className="p-4 bg-white rounded shadow-md">
