@@ -2,11 +2,12 @@ import React from "react";
 
 const ChatBox = ({ user }) => {
   console.log("Chatbox users:=", user);
-
+  // const messageContents = user.messages.map((msg) => msg.content);
+  // console.log(messageContents);
   // const photo = user?.users?.receiver?.photo;
-  // const name = user?.users?.receiver?.name;
+  const names = user?.users?.receiver?.name;
   // const messages = user?.messages[0]?.content;
-
+  // console.log(names);
   if (!user) {
     return (
       <div className="text-white p-4 bg-yellow-400">
@@ -17,7 +18,7 @@ const ChatBox = ({ user }) => {
   const isProcessedChat = user?.users && user?.messages;
   const photo = user.receiver?.photo;
   const name = user.receiver?.name;
-  console.log("Clicked user:=", name);
+  // console.log("Clicked user:=", name);
   return (
     <>
       <div className="p-4 bg-white rounded shadow-md">
@@ -28,7 +29,9 @@ const ChatBox = ({ user }) => {
           className="w-16 h-16 rounded-full object-cover"
         />
       </div>
-      <div>{/* <p>{messages}</p> */}</div>
+      <div>
+        <p>{messageContents}</p>
+      </div>
     </>
   );
 };

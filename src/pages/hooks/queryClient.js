@@ -100,7 +100,7 @@ export const userProfiles = async ({ searchTerm }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log("Fetched Users:", response.data);
+    console.log("Fetched Users:", response.data);
     // Filter users on the frontend as an extra check
     const filteredUsers = response.data.filter(
       (user) => user?.name?.toLowerCase().startsWith(searchTerm.toLowerCase()) // Optional chaining (?.) prevents errors
@@ -194,7 +194,7 @@ export const fetchUserChats = async ({ user, dispatch }) => {
       },
       withCredentials: true,
     });
-    // console.log(response.data.chats);
+    console.log("All chats with messages", response.data.chats);
     dispatch(addChat(response.data.chats));
     // console.log("Dispatching chats:", response.data.chats);
     // if (response.data.success) {
@@ -211,12 +211,10 @@ export const fetchUserChats = async ({ user, dispatch }) => {
 };
 export const getChatMessages = async ({ receiverId, authUser }) => {
   const token = localStorage.getItem("accessToken"); // Retrieve token
-
   if (!token) {
     console.error("No access token found!");
     return; // Prevent request if token is missing
   }
-
   try {
     const response = await axios.get("http://localhost:3000/api/messages", {
       params: { receiverId, authUser }, // ✅ Ensure query parameters are included
