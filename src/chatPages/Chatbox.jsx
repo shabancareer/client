@@ -2,12 +2,7 @@ import React from "react";
 
 const ChatBox = ({ user }) => {
   console.log("Chatbox users:=", user);
-  // const messageContents = user.messages.map((msg) => msg.content);
-  // console.log(messageContents);
-  // const photo = user?.users?.receiver?.photo;
-  const names = user?.users?.receiver?.name;
-  // const messages = user?.messages[0]?.content;
-  // console.log(names);
+
   if (!user) {
     return (
       <div className="text-white p-4 bg-yellow-400">
@@ -15,10 +10,14 @@ const ChatBox = ({ user }) => {
       </div>
     );
   }
-  const isProcessedChat = user?.users && user?.messages;
-  const photo = user.receiver?.photo;
-  const name = user.receiver?.name;
-  // console.log("Clicked user:=", name);
+  // Handle both structures
+  const isFromSearch = user?.users && user?.messages;
+  const receiver = isFromSearch ? user.users.receiver : user.receiver;
+  const name = receiver?.name;
+  const photo = receiver?.photo;
+  // const photo = user.receiver?.photo;
+  // const name = user.receiver?.name;
+  // console.log("isFromSearch Or chat user", receiver);
   return (
     <>
       <div className="p-4 bg-white rounded shadow-md">
@@ -29,9 +28,7 @@ const ChatBox = ({ user }) => {
           className="w-16 h-16 rounded-full object-cover"
         />
       </div>
-      <div>
-        <p>{messageContents}</p>
-      </div>
+      <div>{/* <p>{messageContents}</p> */}</div>
     </>
   );
 };

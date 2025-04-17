@@ -100,12 +100,16 @@ export const userProfiles = async ({ searchTerm }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Fetched Users:", response.data);
     // Filter users on the frontend as an extra check
-    const filteredUsers = response.data.filter(
-      (user) => user?.name?.toLowerCase().startsWith(searchTerm.toLowerCase()) // Optional chaining (?.) prevents errors
-    );
-    // console.log("filteredUsers=", filteredUsers);
+    const filteredUsers = response.data
+      .filter(
+        (user) => user?.name?.toLowerCase().startsWith(searchTerm.toLowerCase()) // Optional chaining (?.) prevents errors
+      )
+      .map((user) => ({
+        ...user,
+        messages: user.chat?.messages || [], // add a `messages` array even if empty
+      }));
+    // console.log("filteredUsers===", filteredUsers);
     return filteredUsers;
     // return response.data;
   } catch (error) {
