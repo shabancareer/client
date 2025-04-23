@@ -1,8 +1,7 @@
 import React from "react";
+import TypeMessage from "./Typemessage";
 
 const ChatBox = ({ user }) => {
-  console.log("Chatbox users:=", user);
-
   if (!user) {
     return (
       <div className="text-white p-4 bg-yellow-400">
@@ -15,9 +14,8 @@ const ChatBox = ({ user }) => {
   const receiver = isFromSearch ? user.users.receiver : user.receiver;
   const name = receiver?.name;
   const photo = receiver?.photo;
-  // const photo = user.receiver?.photo;
-  // const name = user.receiver?.name;
-  // console.log("isFromSearch Or chat user", receiver);
+  const messages = isFromSearch ? user.messages : user.messages || [];
+  // console.log(messages);
   return (
     <>
       <div className="p-4 bg-white rounded shadow-md">
@@ -28,7 +26,24 @@ const ChatBox = ({ user }) => {
           className="w-16 h-16 rounded-full object-cover"
         />
       </div>
-      <div>{/* <p>{messageContents}</p> */}</div>
+      <div>
+        {messages.length > 0 ? (
+          messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`p-2 rounded ${
+                msg.senderId === receiver?.id
+                  ? "bg-gray-200 text-black self-start"
+                  : "bg-blue-500 text-white self-end"
+              }`}
+            >
+              {msg.content}
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No messages yet.</p>
+        )}
+      </div>
     </>
   );
 };

@@ -3,6 +3,8 @@ import UserProfile from "./userProfile";
 import UserProfileSetting from "./userProfileSetting";
 import ChatBox from "./ChatBox";
 import UserChats from "./UserChats";
+import TypeMessage from "./Typemessage";
+
 // import { useSelector } from "react-redux";
 const ChatDashboard = () => {
   // const userChats = useSelector((state) => state.chats);
@@ -19,21 +21,12 @@ const ChatDashboard = () => {
   };
   // Function to handle chat selection
   const handleSelectChat = (user) => {
-    // console.log("Selected Chat:", user); // Debugging
-    // const messageContents = user.messages.map((msg) => msg.content);
-    // const firstMessageContent = messageContents[0];
-
-    // setSelectedUser(user);
     setSearchedUser(user);
-    // setSelectedChat(firstMessageContent); // If chat exists, set it
   };
-  // const userChat = (chat) => {
-  //   // console.log("Chat clicked:", chat); // Debugging
-  //   setCurrentChat(chat); // Update currentChat state
-  // };
+
   return (
     <>
-      <div className="flex flex-row">
+      <div className="flex flex-row relative h-100">
         <UserProfile onShowProfile={handleShowProfile} />
         {photoUpdated || !selectedUser ? (
           <UserChats onSelectChat={handleSelectChat} />
@@ -46,10 +39,9 @@ const ChatDashboard = () => {
         {/* <UserProfileSetting /> */}
         <div className="flex-1">
           <ChatBox user={searchedUser} />
-          {/* <p>chat={selectedChat}</p> */}
-          {/* {console.log("selectedChat", selectedChat.content)} */}
-          {/* {selectedChat.content} */}
-          <div>{/* <p>selectedChat</p> */}</div>
+        </div>
+        <div>
+          <TypeMessage />
         </div>
       </div>
     </>
