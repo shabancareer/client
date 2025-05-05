@@ -20,6 +20,7 @@ const UserChats = ({ onSelectChat }) => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const authUser = useSelector((state) => state.auth.user);
   const chats = useSelector((state) => state.chat.chats);
+  // console.log("Chats from Redux state in type User chat component:", chats);
 
   useEffect(() => {
     // console.log("Chats in Redux:", chats);

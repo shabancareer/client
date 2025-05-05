@@ -198,7 +198,7 @@ export const fetchUserChats = async ({ user, dispatch }) => {
       },
       withCredentials: true,
     });
-    console.log("All chats with messages", response.data.chats);
+    // console.log("All chats with messages", response.data.chats);
     dispatch(addChat(response.data.chats));
     // console.log("Dispatching chats:", response.data.chats);
     // if (response.data.success) {

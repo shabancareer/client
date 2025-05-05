@@ -26,7 +26,7 @@ const ChatDashboard = () => {
 
   return (
     <>
-      <div className="flex flex-row relative h-100">
+      <div className="flex flex-row relative h-100 bg-slate-100">
         <UserProfile onShowProfile={handleShowProfile} />
         {photoUpdated || !selectedUser ? (
           <UserChats onSelectChat={handleSelectChat} />
@@ -41,7 +41,7 @@ const ChatDashboard = () => {
           <ChatBox user={searchedUser} />
         </div>
         <div>
-          <TypeMessage />
+          <TypeMessage user={selectedUser} />
         </div>
       </div>
     </>
