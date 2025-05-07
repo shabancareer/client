@@ -2,6 +2,7 @@ import React from "react";
 import TypeMessage from "./Typemessage";
 
 const ChatBox = ({ user }) => {
+  // console.log("chat box up==", user);
   if (!user) {
     return (
       <div className="text-white p-4 bg-yellow-400">

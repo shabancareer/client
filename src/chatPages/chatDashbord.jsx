@@ -13,7 +13,7 @@ const ChatDashboard = () => {
   const [searchedUser, setSearchedUser] = useState(null);
   const [currentChat, setCurrentChat] = useState(null);
   const [photoUpdated, setPhotoUpdated] = useState(false); // Track photo update
-
+  // console.log(searchedUser);
   const handleShowProfile = (user) => {
     setSelectedUser(user); // Set the selected user data when clicked
     setPhotoUpdated(false); // Reset state when opening profile again
@@ -21,6 +21,7 @@ const ChatDashboard = () => {
   };
   // Function to handle chat selection
   const handleSelectChat = (user) => {
+    // console.log(user);
     setSearchedUser(user);
   };
 
@@ -40,9 +41,9 @@ const ChatDashboard = () => {
         <div className="flex-1">
           <ChatBox user={searchedUser} />
         </div>
-        <div>
-          <TypeMessage user={selectedUser} />
-        </div>
+      </div>
+      <div>
+        <TypeMessage user={searchedUser} />
       </div>
     </>
   );
